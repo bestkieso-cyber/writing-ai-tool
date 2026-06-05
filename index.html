@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>國小寫作AI備課指令系統｜108課綱</title>
+<meta name="description" content="依據108課綱設計的國小語文教師AI備課工具，涵蓋學情診斷、單元教學設計、課堂鷹架建構、評量回饋四大模組，第一至第三學習階段（1–6年級）適用。">
+<meta name="keywords" content="108課綱,國小語文,寫作教學,AI備課,教學設計,學情診斷,寫作鷹架">
+<meta property="og:title" content="國小寫作AI備課指令系統｜108課綱">
+<meta property="og:description" content="幫助國小語文教師透過AI進行有系統的寫作課程教學設計備課工具">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --purple-50:#EEEDFE; --purple-100:#CECBF6; --purple-200:#AFA9EC;
+  --purple-400:#7F77DD; --purple-600:#534AB7; --purple-800:#3C3489; --purple-900:#26215C;
+  --teal-50:#E1F5EE; --teal-100:#9FE1CB; --teal-200:#5DCAA5;
+  --teal-600:#0F6E56; --teal-800:#085041; --teal-900:#04342C;
+  --coral-50:#FAECE7; --coral-100:#F5C4B3; --coral-200:#F0997B;
+  --coral-600:#993C1D; --coral-800:#712B13;
+  --amber-50:#FAEEDA; --amber-100:#FAC775; --amber-200:#EF9F27;
+  --amber-600:#854F0B; --amber-800:#633806;
+  --gray-50:#F1EFE8; --gray-100:#D3D1C7; --gray-200:#B4B2A9;
+  --gray-400:#888780; --gray-600:#5F5E5A; --gray-800:#444441; --gray-900:#2C2C2A;
+  --blue-50:#E6F1FB; --blue-800:#0C447C; --blue-900:#042C53;
+  --green-50:#EAF3DE; --green-600:#3B6D11; --green-800:#27500A;
+  --bg:#FAFAF8; --surface:#FFFFFF; --surface2:#F5F4F0;
+  --border:rgba(0,0,0,0.1); --border2:rgba(0,0,0,0.18);
+  --text:#1A1A18; --text2:#5F5E5A; --text3:#888780;
+  --radius:8px; --radius-lg:12px; --radius-xl:16px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+}
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  background:var(--bg); color:var(--text);
+  font-size:15px; line-height:1.7;
+}
+
+/* ── Header ── */
+.site-header {
+  background:var(--purple-900); padding:1.25rem 2rem;
+  display:flex; align-items:center; gap:1rem;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.site-logo { font-size:16px; font-weight:600; color:var(--purple-100); letter-spacing:.02em; }
+.site-logo span { color:var(--purple-400); }
+.site-badge {
+  font-size:11px; padding:3px 8px;
+  background:var(--purple-800); color:var(--purple-200);
+  border-radius:20px; font-weight:500; letter-spacing:.05em;
+}
+.header-note { margin-left:auto; font-size:12px; color:var(--purple-200); }
+
+/* ── Intro Banner ── */
+.intro-banner {
+  background:linear-gradient(135deg,var(--purple-900) 0%,var(--purple-800) 100%);
+  color:var(--purple-100); padding:2rem 2rem 1.75rem;
+  border-bottom:1px solid var(--purple-800);
+}
+.intro-banner h1 { font-size:18px; font-weight:600; margin-bottom:.4rem; color:#fff; }
+.intro-banner p { font-size:13px; line-height:1.7; color:var(--purple-200); max-width:680px; }
+.intro-steps {
+  display:flex; gap:.75rem; margin-top:1rem; flex-wrap:wrap;
+}
+.intro-step {
+  display:flex; align-items:center; gap:.4rem;
+  font-size:12px; color:var(--purple-200);
+}
+.intro-step-num {
+  width:20px; height:20px; border-radius:50%;
+  background:var(--purple-600); color:var(--purple-100);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; flex-shrink:0;
+}
+.intro-arrow { color:var(--purple-600); font-size:14px; }
+
+/* ── Layout ── */
+.main-wrap { max-width:880px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+
+/* ── Tab Nav ── */
+.tab-nav {
+  display:flex; gap:4px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-xl); padding:5px;
+  margin-bottom:2rem; flex-wrap:wrap;
+}
+.tab-nav-btn {
+  flex:1; min-width:130px;
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  padding:9px 10px; border-radius:var(--radius-lg);
+  border:none; background:transparent;
+  font-family:inherit; font-size:14px; color:var(--text2);
+  cursor:pointer; transition:all .18s; font-weight:500;
+}
+.tab-nav-btn:hover { background:var(--surface2); color:var(--text); }
+.tab-nav-btn.active { background:var(--purple-900); color:var(--purple-100); box-shadow:var(--shadow); }
+.tab-nav-btn .tab-icon { font-size:17px; }
+
+.tab-panel { display:none; }
+.tab-panel.active { display:block; animation:fadeIn .2s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+
+/* ── Module Header ── */
+.module-header { margin-bottom:1.75rem; }
+.module-tag {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  padding:4px 10px; border-radius:20px; margin-bottom:.75rem;
+}
+.tag-a { background:var(--purple-100); color:var(--purple-900); }
+.tag-b { background:var(--teal-50); color:var(--teal-600); }
+.tag-c { background:var(--amber-50); color:var(--amber-600); }
+.tag-d { background:var(--green-50); color:var(--green-600); }
+.module-header h2 { font-size:22px; font-weight:600; margin-bottom:.4rem; }
+.module-header p { font-size:14px; color:var(--text2); line-height:1.7; max-width:620px; }
+
+/* ── Cards ── */
+.card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:1.5rem;
+  margin-bottom:1.25rem; box-shadow:var(--shadow);
+}
+.card-title {
+  font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--text3); margin-bottom:1rem;
+}
+
+/* ── Form ── */
+.field { margin-bottom:1.1rem; }
+.field:last-child { margin-bottom:0; }
+.field-label { display:block; font-size:13px; font-weight:500; color:var(--text2); margin-bottom:.4rem; }
+.field-label .req { color:#D85A30; margin-left:2px; }
+.field-hint { font-size:12px; color:var(--text3); margin-top:.3rem; line-height:1.5; }
+select, textarea, input[type="text"] {
+  width:100%; font-family:inherit; font-size:14px; color:var(--text);
+  background:var(--surface2); border:1px solid var(--border2);
+  border-radius:var(--radius); padding:9px 12px;
+  transition:border-color .15s,box-shadow .15s; outline:none;
+}
+select { height:40px; cursor:pointer; }
+textarea { resize:vertical; min-height:80px; line-height:1.65; }
+select:focus, textarea:focus, input[type="text"]:focus {
+  border-color:var(--purple-400);
+  box-shadow:0 0 0 3px rgba(127,119,221,0.15);
+}
+
+/* ── Source Tabs ── */
+.source-tabs { display:flex; gap:6px; margin-bottom:.85rem; flex-wrap:wrap; }
+.src-btn {
+  font-size:13px; font-weight:500; padding:6px 14px;
+  border-radius:20px; border:1px solid var(--border2);
+  background:var(--surface2); color:var(--text2); cursor:pointer; transition:all .15s;
+}
+.src-btn.active { background:var(--purple-100); color:var(--purple-900); border-color:var(--purple-200); }
+.src-panel { display:none; }
+.src-panel.active { display:block; }
+
+/* ── Upload ── */
+.upload-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:.5rem; }
+.upload-btn {
+  display:inline-flex; flex-direction:column; align-items:center; gap:3px;
+  padding:.6rem 1.1rem; border-radius:var(--radius);
+  border:1px dashed var(--border2); background:var(--surface2);
+  color:var(--text2); font-size:13px; font-weight:500;
+  cursor:pointer; transition:all .15s;
+}
+.upload-btn:hover { border-color:var(--purple-400); background:var(--purple-50); color:var(--purple-800); }
+.upload-btn.has-file { border-style:solid; border-color:var(--teal-200); background:var(--teal-50); color:var(--teal-600); }
+.upload-hint { font-size:11px; color:var(--text3); font-weight:400; }
+.divider-or {
+  display:flex; align-items:center; gap:.75rem; margin:.75rem 0;
+}
+.divider-or hr { flex:1; border:none; border-top:1px solid var(--border); }
+.divider-or span { font-size:12px; color:var(--text3); white-space:nowrap; }
+
+/* ── Tips ── */
+.tip-box {
+  border-left:3px solid var(--purple-200); background:var(--purple-50);
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:.75rem 1rem; font-size:13px; color:var(--purple-800); line-height:1.65; margin-top:.7rem;
+}
+.tip-box.teal { border-color:var(--teal-200); background:var(--teal-50); color:var(--teal-600); }
+.tip-box.amber { border-color:var(--amber-100); background:var(--amber-50); color:var(--amber-600); }
+.tip-box strong { font-weight:600; }
+
+/* ── Knowledge Box ── */
+.knowledge-box {
+  border:1px solid var(--teal-100); background:var(--teal-50);
+  border-radius:var(--radius-lg); padding:1rem 1.25rem; margin-top:1rem;
+}
+.kb-label {
+  font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--teal-600); margin-bottom:.5rem;
+}
+.knowledge-box p { font-size:13px; color:var(--teal-800); line-height:1.7; }
+.knowledge-box p + p { margin-top:.5rem; }
+.warn { color:#854F0B; font-weight:500; }
+
+/* ── Buttons ── */
+.btn-primary {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--purple-900); color:var(--purple-100);
+  border:none; border-radius:var(--radius); padding:11px 22px;
+  font-family:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; transition:background .15s,transform .1s;
+}
+.btn-primary:hover { background:var(--purple-800); }
+.btn-primary:active { transform:scale(.98); }
+.btn-secondary {
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--surface); color:var(--text2);
+  border:1px solid var(--border2); border-radius:var(--radius);
+  padding:8px 16px; font-family:inherit; font-size:13px; font-weight:500;
+  cursor:pointer; transition:background .15s;
+}
+.btn-secondary:hover { background:var(--surface2); color:var(--text); }
+.btn-row { display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; margin-top:1.25rem; }
+
+/* ── Prompt Output ── */
+.prompt-output { display:none; margin-top:1.5rem; }
+.prompt-output.show { display:block; animation:fadeIn .25s ease; }
+.prompt-section-label {
+  font-size:12px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--text3); margin-bottom:.6rem;
+}
+.prompt-box {
+  background:var(--gray-900); color:#E8E6E0;
+  border-radius:var(--radius-lg); padding:1.5rem;
+  font-size:13px; line-height:1.85; white-space:pre-wrap;
+  word-break:break-word;
+  max-height:480px; overflow-y:auto; margin-bottom:.75rem;
+}
+.prompt-box::-webkit-scrollbar { width:5px; }
+.prompt-box::-webkit-scrollbar-thumb { background:var(--gray-600); border-radius:3px; }
+
+/* ── Grid ── */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media(max-width:600px){ .grid-2{ grid-template-columns:1fr; } .tab-nav-btn{ min-width:100px; font-size:13px; } }
+
+/* ── Divider ── */
+hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
+
+/* ── Alert ── */
+.alert {
+  border-radius:var(--radius); padding:.85rem 1rem;
+  font-size:13px; line-height:1.65; margin-bottom:1rem;
+  display:flex; gap:.6rem; align-items:flex-start;
+}
+.alert-icon { flex-shrink:0; font-size:16px; margin-top:1px; }
+.alert-warn { background:var(--amber-50); color:var(--amber-800); border:1px solid var(--amber-100); }
+.alert-info { background:var(--blue-50); color:var(--blue-800); border:1px solid #B5D4F4; }
+.alert-success { background:var(--teal-50); color:var(--teal-800); border:1px solid var(--teal-100); }
+
+/* ── Sub Tabs ── */
+.sub-tabs {
+  display:flex; gap:6px; margin-bottom:1rem;
+  border-bottom:1px solid var(--border); padding-bottom:.75rem; flex-wrap:wrap;
+}
+.sub-tab-btn {
+  font-size:13px; font-weight:500; padding:6px 14px;
+  border-radius:var(--radius); border:1px solid transparent;
+  background:transparent; color:var(--text2); cursor:pointer; transition:all .15s;
+}
+.sub-tab-btn:hover { background:var(--surface2); }
+.sub-tab-btn.active { background:var(--surface); border-color:var(--border2); color:var(--text); box-shadow:var(--shadow); }
+.sub-panel { display:none; }
+.sub-panel.active { display:block; }
+
+/* ── Footer ── */
+.site-footer {
+  text-align:center; padding:2rem 1rem;
+  font-size:12px; color:var(--text3);
+  border-top:1px solid var(--border);
+}
+.site-footer a { color:var(--purple-600); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-logo">國小寫作<span>AI</span>備課系統</div>
+  <span class="site-badge">108課綱・國小版</span>
+  <span class="header-note">第一～三學習階段｜1–6年級</span>
+</header>
+
+<div class="intro-banner">
+  <h1>國小語文教師寫作課程AI備課指令系統</h1>
+  <p>依據108課綱國語文領域學習表現與學習內容設計，幫助教師在有限時數內進行專業且有系統的寫作課程教學設計。填寫基本資訊後，系統自動生成可直接貼入 ChatGPT 或 Claude 使用的完整AI指令。</p>
+  <div class="intro-steps">
+    <div class="intro-step"><div class="intro-step-num">A</div>學情診斷</div>
+    <div class="intro-arrow">→</div>
+    <div class="intro-step"><div class="intro-step-num">B</div>單元設計</div>
+    <div class="intro-arrow">→</div>
+    <div class="intro-step"><div class="intro-step-num">C</div>鷹架建構</div>
+    <div class="intro-arrow">→</div>
+    <div class="intro-step"><div class="intro-step-num">D</div>評量回饋</div>
+  </div>
+</div>
+
+<main class="main-wrap">
+
+  <nav class="tab-nav" role="tablist">
+    <button class="tab-nav-btn active" onclick="switchMain(this,'A')" role="tab">
+      <span class="tab-icon">🔍</span>
+      <span>模組 A<br><small style="font-weight:400;font-size:12px">學情診斷</small></span>
+    </button>
+    <button class="tab-nav-btn" onclick="switchMain(this,'B')" role="tab">
+      <span class="tab-icon">📐</span>
+      <span>模組 B<br><small style="font-weight:400;font-size:12px">單元設計</small></span>
+    </button>
+    <button class="tab-nav-btn" onclick="switchMain(this,'C')" role="tab">
+      <span class="tab-icon">🧱</span>
+      <span>模組 C<br><small style="font-weight:400;font-size:12px">鷹架建構</small></span>
+    </button>
+    <button class="tab-nav-btn" onclick="switchMain(this,'D')" role="tab">
+      <span class="tab-icon">📊</span>
+      <span>模組 D<br><small style="font-weight:400;font-size:12px">評量回饋</small></span>
+    </button>
+  </nav>
+
+  <!-- ══ MODULE A ══ -->
+  <section class="tab-panel active" id="panel-A">
+    <div class="module-header">
+      <div class="module-tag tag-a">模組 A・學情診斷</div>
+      <h2>學情診斷與課程定位</h2>
+      <p>備課之前，先確認學生的寫作能力實際對應哪個學習階段，找出能力斷點與教學起點，讓後續的教學設計有真實的依據。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">步驟一｜填寫基本教學資訊</div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="field-label">任教年級<span class="req">*</span></label>
+          <select id="a-grade" onchange="updateStageHint()">
+            <option value="">請選擇年級</option>
+            <option value="1">一年級（第一學習階段）</option>
+            <option value="2">二年級（第一學習階段）</option>
+            <option value="3">三年級（第二學習階段）</option>
+            <option value="4">四年級（第二學習階段）</option>
+            <option value="5">五年級（第三學習階段）</option>
+            <option value="6">六年級（第三學習階段）</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">本學期預計寫作文體或主題</label>
+          <input type="text" id="a-topic" placeholder="例如：記敘文、說明文、寫一件難忘的事……">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">班級整體學習表現<span class="req">*</span></label>
+        <textarea id="a-class" rows="3" placeholder="用自己的話描述即可。例如：班上約30人，大多數學生寫句子沒有問題，但要寫完整段落時會不知道要寫什麼。有幾位學生連基本句子都吃力。"></textarea>
+      </div>
+      <div id="a-stage-hint"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">步驟二｜選擇診斷素材來源</div>
+      <div class="source-tabs">
+        <button class="src-btn active" onclick="switchSrc('A','sample')" id="A-tab-sample">學生寫作樣本</button>
+        <button class="src-btn" onclick="switchSrc('A','verbal')" id="A-tab-verbal">口頭描述現況</button>
+        <button class="src-btn" onclick="switchSrc('A','curriculum')" id="A-tab-curriculum">課綱或教材文本</button>
+      </div>
+
+      <div class="src-panel active" id="A-panel-sample">
+        <div class="field">
+          <label class="field-label">上傳學生作品（選擇一種方式）</label>
+          <div class="upload-row">
+            <label class="upload-btn" id="a-img-label" for="a-img-upload">
+              <span>📷 上傳作品圖片</span>
+              <span class="upload-hint">JPG / PNG</span>
+            </label>
+            <input type="file" id="a-img-upload" accept="image/*" style="display:none" onchange="handleImgUpload(event,'a-img-preview','a-img-note','a-img-label','a-img-el')">
+            <label class="upload-btn" id="a-file-label" for="a-file-upload">
+              <span>📄 上傳文字檔</span>
+              <span class="upload-hint">TXT</span>
+            </label>
+            <input type="file" id="a-file-upload" accept=".txt,text/plain" style="display:none" onchange="handleTxtUpload(event,'a-sample','a-file-label')">
+          </div>
+          <div id="a-img-preview" style="display:none;margin:.6rem 0;">
+            <img id="a-img-el" style="max-width:100%;max-height:220px;border-radius:var(--radius);border:1px solid var(--border);" alt="學生作品預覽">
+            <p id="a-img-note" style="font-size:12px;color:var(--text3);margin-top:.3rem"></p>
+          </div>
+          <div class="divider-or"><hr><span>或直接輸入文字</span><hr></div>
+          <label class="field-label">貼入或描述學生寫作樣本<span class="req">*</span></label>
+          <textarea id="a-sample" rows="4" placeholder="可直接貼入學生文字，或描述樣本特徵。例如：學生寫了約80字描述去公園玩，全文一段，無標點，句子間用「然後」連接，缺乏具體描述。&#10;&#10;若已上傳圖片，可在此補充說明圖片中看不清楚的部分。"></textarea>
+          <p class="field-hint">建議選取「中間程度」最具代表性的一份，不需完美樣本。</p>
+        </div>
+      </div>
+
+      <div class="src-panel" id="A-panel-verbal">
+        <div class="field">
+          <label class="field-label">描述你觀察到的學生寫作現況<span class="req">*</span></label>
+          <textarea id="a-verbal" rows="4" placeholder="例如：學生能寫完整句子，但段落混亂，常跳來跳去。遇到說明類題目完全不知下手。情感表達只會寫「我很高興」，不會進一步描述。"></textarea>
+          <p class="field-hint">從「學生能做到什麼」和「學生做不到什麼」兩個方向描述效果最好。</p>
+        </div>
+      </div>
+
+      <div class="src-panel" id="A-panel-curriculum">
+        <div class="field">
+          <label class="field-label">本單元課文名稱或文本描述<span class="req">*</span></label>
+          <textarea id="a-curriculum" rows="4" placeholder="例如：本單元課文為《外婆的澎湖灣》改寫版，是記敘文，描述作者回憶童年與外婆在澎湖的生活片段，有人物、地點、事件，也有情感抒發。"></textarea>
+          <p class="field-hint">適合手邊無學生樣本，想從「課文應對應什麼寫作能力」反推教學起點的情況。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">步驟三｜設定診斷重點</div>
+      <div class="field">
+        <label class="field-label">你最想透過這次診斷釐清什麼？</label>
+        <textarea id="a-focus" rows="2" placeholder="例如：想知道學生實際對應幾年級的能力、想確認這個年段應該教什麼文體、想知道我的命題有沒有符合課綱要求……"></textarea>
+        <p class="field-hint">選填。填入後AI的診斷報告會優先回應你的關切點。</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="generateA()">⚡ 生成學情診斷指令</button>
+      <button class="btn-secondary" onclick="clearModule('A')">↺ 清除重填</button>
+    </div>
+
+    <div class="prompt-output" id="A-output">
+      <hr class="div">
+      <p class="prompt-section-label">✅ 指令已生成｜複製後貼入 ChatGPT 或 Claude 使用</p>
+      <div class="prompt-box" id="A-prompt-text"></div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="copyPrompt('A-prompt-text',this)">📋 複製指令</button>
+        <button class="btn-secondary" onclick="downloadPrompt('A-prompt-text','學情診斷指令')">⬇ 下載為 .txt</button>
+      </div>
+      <div id="A-knowledge-box"></div>
+    </div>
+  </section>
+
+  <!-- ══ MODULE B ══ -->
+  <section class="tab-panel" id="panel-B">
+    <div class="module-header">
+      <div class="module-tag tag-b">模組 B・單元設計</div>
+      <h2>單元寫作教學設計</h2>
+      <p>依據年段、文體與授課時數，生成符合108課綱的完整單元教學計畫，包含教學目標、流程架構與各節課核心任務。</p>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">💡</span>
+      <span>建議先完成<strong>模組A的學情診斷</strong>，再進行單元設計，教學起點會更精準。</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">基本資訊設定</div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="field-label">任教年級<span class="req">*</span></label>
+          <select id="b-grade">
+            <option value="">請選擇年級</option>
+            <option value="1">一年級（第一學習階段）</option>
+            <option value="2">二年級（第一學習階段）</option>
+            <option value="3">三年級（第二學習階段）</option>
+            <option value="4">四年級（第二學習階段）</option>
+            <option value="5">五年級（第三學習階段）</option>
+            <option value="6">六年級（第三學習階段）</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">預計授課節數<span class="req">*</span></label>
+          <select id="b-hours">
+            <option value="">請選擇</option>
+            <option value="1">1節課（快速介入）</option>
+            <option value="2">2節課</option>
+            <option value="3">3節課（標準完整）</option>
+            <option value="5">5節課（深化寫作）</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="field-label">寫作文體<span class="req">*</span></label>
+          <select id="b-genre">
+            <option value="">請選擇文體</option>
+            <option value="記敘文本">記敘文本（以人事時地物為敘寫對象）</option>
+            <option value="抒情文本">抒情文本（抒發對人事物景之情感）</option>
+            <option value="說明文本">說明文本（邏輯客觀說明事物事理）</option>
+            <option value="議論文本">議論文本（以論點論據表達看法）</option>
+            <option value="應用文本">應用文本（日記、書信、海報等）</option>
+            <option value="童詩">童詩／新詩</option>
+            <option value="故事">故事創作</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">寫作主題或題目</label>
+          <input type="text" id="b-topic" placeholder="例如：一件讓我感謝的事、介紹家鄉特色……">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">課文與學生起點（選填但強烈建議）</div>
+      <div class="field">
+        <label class="field-label">本單元對應課文或閱讀文本</label>
+        <input type="text" id="b-text" placeholder="例如：《我的名字》、描述童年回憶的現代散文……">
+      </div>
+      <div class="field">
+        <label class="field-label">學生已具備的寫作基礎</label>
+        <textarea id="b-base" rows="2" placeholder="可從模組A的診斷結果摘要填入，或自行描述。例如：學生能寫出完整句子，有順敘概念，但段落組織弱。"></textarea>
+      </div>
+      <div class="field">
+        <label class="field-label">特別教學需求或限制</label>
+        <textarea id="b-special" rows="2" placeholder="例如：班上有數位學生閱讀能力偏低、希望加入同儕互評、須配合校本課程主題……"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">教學設計偏好</div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="field-label">寫作技巧教學重點</label>
+          <select id="b-skill">
+            <option value="">不指定（由AI依年段建議）</option>
+            <option value="仿寫">仿寫</option>
+            <option value="擴寫">擴寫</option>
+            <option value="縮寫">縮寫</option>
+            <option value="改寫">改寫</option>
+            <option value="五感描寫">五感描寫</option>
+            <option value="直接間接抒情">直接與間接抒情</option>
+            <option value="順敘倒敘">順敘與倒敘</option>
+            <option value="開頭結尾技巧">開頭與結尾技巧</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">是否納入修改潤飾環節</label>
+          <select id="b-revise">
+            <option value="是">是，請設計修改環節</option>
+            <option value="否">否，時數有限略過</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="generateB()">⚡ 生成單元教學設計指令</button>
+      <button class="btn-secondary" onclick="clearModule('B')">↺ 清除重填</button>
+    </div>
+
+    <div class="prompt-output" id="B-output">
+      <hr class="div">
+      <p class="prompt-section-label">✅ 指令已生成｜複製後貼入 ChatGPT 或 Claude 使用</p>
+      <div class="prompt-box" id="B-prompt-text"></div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="copyPrompt('B-prompt-text',this)">📋 複製指令</button>
+        <button class="btn-secondary" onclick="downloadPrompt('B-prompt-text','單元教學設計指令')">⬇ 下載為 .txt</button>
+      </div>
+      <div id="B-knowledge-box"></div>
+    </div>
+  </section>
+
+  <!-- ══ MODULE C ══ -->
+  <section class="tab-panel" id="panel-C">
+    <div class="module-header">
+      <div class="module-tag tag-c">模組 C・鷹架建構</div>
+      <h2>課堂任務與鷹架建構</h2>
+      <p>當學生「寫不出來」，你能給他什麼幫助？選擇你需要的鷹架類型，生成可直接用於課堂的教學材料。</p>
+    </div>
+
+    <div class="sub-tabs">
+      <button class="sub-tab-btn active" onclick="switchSub(this,'C','form')">形式鷹架</button>
+      <button class="sub-tab-btn" onclick="switchSub(this,'C','content')">內容鷹架</button>
+      <button class="sub-tab-btn" onclick="switchSub(this,'C','diff')">分層任務</button>
+    </div>
+
+    <div class="sub-panel active" id="C-panel-form">
+      <div class="tip-box"><strong>形式鷹架</strong>：幫助學生掌握「怎麼寫」——句型練習、結構圖示、仿寫素材，讓學生有格式可依循。</div>
+      <div class="card" style="margin-top:1rem">
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">年級<span class="req">*</span></label>
+            <select id="c1-grade">
+              <option value="">請選擇</option>
+              <option value="1">一年級</option><option value="2">二年級</option>
+              <option value="3">三年級</option><option value="4">四年級</option>
+              <option value="5">五年級</option><option value="6">六年級</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">文體<span class="req">*</span></label>
+            <select id="c1-genre">
+              <option value="">請選擇</option>
+              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
+              <option value="說明文">說明文</option><option value="議論文">議論文</option>
+              <option value="應用文">應用文</option><option value="童詩">童詩</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">核心寫作技巧或結構重點<span class="req">*</span></label>
+          <input type="text" id="c1-focus" placeholder="例如：順敘法、直接抒情、說明文結構、開頭技巧……">
+        </div>
+        <div class="field">
+          <label class="field-label">其他需求</label>
+          <textarea id="c1-extra" rows="2" placeholder="例如：請加入師生課堂對話腳本、需要附結構圖示、請提供三組示範句型……"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="generateC('form')">⚡ 生成形式鷹架指令</button>
+      </div>
+      <div class="prompt-output" id="C-form-output">
+        <hr class="div">
+        <p class="prompt-section-label">✅ 指令已生成</p>
+        <div class="prompt-box" id="C-form-prompt"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyPrompt('C-form-prompt',this)">📋 複製指令</button>
+          <button class="btn-secondary" onclick="downloadPrompt('C-form-prompt','形式鷹架指令')">⬇ 下載</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="C-panel-content">
+      <div class="tip-box teal"><strong>內容鷹架</strong>：幫助學生解決「沒東西可寫」——感知引導、素材積累、思路提示，讓學生有話可說。</div>
+      <div class="card" style="margin-top:1rem">
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">年級<span class="req">*</span></label>
+            <select id="c2-grade">
+              <option value="">請選擇</option>
+              <option value="1">一年級</option><option value="2">二年級</option>
+              <option value="3">三年級</option><option value="4">四年級</option>
+              <option value="5">五年級</option><option value="6">六年級</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">文體<span class="req">*</span></label>
+            <select id="c2-genre">
+              <option value="">請選擇</option>
+              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
+              <option value="說明文">說明文</option><option value="議論文">議論文</option>
+              <option value="童詩">童詩</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">寫作主題<span class="req">*</span></label>
+          <input type="text" id="c2-topic" placeholder="例如：一次讓我印象深刻的對話、介紹我最喜歡的地方……">
+        </div>
+        <div class="field">
+          <label class="field-label">希望鷹架著重的方向</label>
+          <select id="c2-focus">
+            <option value="三層次完整鷹架">三層次完整鷹架（觀察感知→素材組織→情感深化）</option>
+            <option value="觀察與感知提問">觀察與感知提問為主</option>
+            <option value="素材積累與組織">素材積累與組織為主</option>
+            <option value="情感或思想深化">情感與思想深化為主</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">是否需要課堂引導對話腳本</label>
+          <select id="c2-script">
+            <option value="是，請提供師生對話腳本">是，請提供師生對話腳本</option>
+            <option value="否">否，只需提問清單即可</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="generateC('content')">⚡ 生成內容鷹架指令</button>
+      </div>
+      <div class="prompt-output" id="C-content-output">
+        <hr class="div">
+        <p class="prompt-section-label">✅ 指令已生成</p>
+        <div class="prompt-box" id="C-content-prompt"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyPrompt('C-content-prompt',this)">📋 複製指令</button>
+          <button class="btn-secondary" onclick="downloadPrompt('C-content-prompt','內容鷹架指令')">⬇ 下載</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="C-panel-diff">
+      <div class="tip-box amber"><strong>分層任務</strong>：同一寫作目標，設計高中低三個層次，讓異質班級中每位學生都有適切的挑戰。</div>
+      <div class="card" style="margin-top:1rem">
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">年級<span class="req">*</span></label>
+            <select id="c3-grade">
+              <option value="">請選擇</option>
+              <option value="1">一年級</option><option value="2">二年級</option>
+              <option value="3">三年級</option><option value="4">四年級</option>
+              <option value="5">五年級</option><option value="6">六年級</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">文體<span class="req">*</span></label>
+            <select id="c3-genre">
+              <option value="">請選擇</option>
+              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
+              <option value="說明文">說明文</option><option value="議論文">議論文</option>
+              <option value="童詩">童詩</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">共同寫作題目或主題<span class="req">*</span></label>
+          <input type="text" id="c3-topic" placeholder="例如：介紹家鄉的一項特色、一件令我後悔的事……">
+        </div>
+        <div class="field">
+          <label class="field-label">班級學生能力分布概況</label>
+          <textarea id="c3-dist" rows="2" placeholder="例如：約1/3學生基礎較弱（句子不完整），1/2中等，少數程度較高。"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="generateC('diff')">⚡ 生成分層任務指令</button>
+      </div>
+      <div class="prompt-output" id="C-diff-output">
+        <hr class="div">
+        <p class="prompt-section-label">✅ 指令已生成</p>
+        <div class="prompt-box" id="C-diff-prompt"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyPrompt('C-diff-prompt',this)">📋 複製指令</button>
+          <button class="btn-secondary" onclick="downloadPrompt('C-diff-prompt','分層任務指令')">⬇ 下載</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MODULE D ══ -->
+  <section class="tab-panel" id="panel-D">
+    <div class="module-header">
+      <div class="module-tag tag-d">模組 D・評量回饋</div>
+      <h2>評量規準與回饋設計</h2>
+      <p>學生寫完後，如何給出有意義的回饋？生成評量規準、AI輔助批閱指令，以及學生自評互評工具。</p>
+    </div>
+
+    <div class="sub-tabs">
+      <button class="sub-tab-btn active" onclick="switchSub(this,'D','rubric')">評量規準</button>
+      <button class="sub-tab-btn" onclick="switchSub(this,'D','feedback')">AI輔助批閱</button>
+      <button class="sub-tab-btn" onclick="switchSub(this,'D','peer')">自評互評</button>
+    </div>
+
+    <div class="sub-panel active" id="D-panel-rubric">
+      <div class="card" style="margin-top:.75rem">
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">年級<span class="req">*</span></label>
+            <select id="d1-grade">
+              <option value="">請選擇</option>
+              <option value="1">一年級</option><option value="2">二年級</option>
+              <option value="3">三年級</option><option value="4">四年級</option>
+              <option value="5">五年級</option><option value="6">六年級</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">文體<span class="req">*</span></label>
+            <select id="d1-genre">
+              <option value="">請選擇</option>
+              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
+              <option value="說明文">說明文</option><option value="議論文">議論文</option>
+              <option value="童詩">童詩</option><option value="應用文">應用文</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">本次寫作的核心教學目標</label>
+          <textarea id="d1-goal" rows="2" placeholder="例如：能寫出順敘結構清楚、具體描述人物的記敘文，約200字。"></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">評量層級偏好</label>
+          <select id="d1-level">
+            <option value="三級（優秀／達標／待加強）">三級（優秀／達標／待加強）</option>
+            <option value="四級（優秀／良好／基本／待加強）">四級（優秀／良好／基本／待加強）</option>
+            <option value="五級（傑出／優秀／達標／努力中／待加強）">五級（傑出／優秀／達標／努力中／待加強）</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="generateD('rubric')">⚡ 生成評量規準指令</button>
+      </div>
+      <div class="prompt-output" id="D-rubric-output">
+        <hr class="div">
+        <p class="prompt-section-label">✅ 指令已生成</p>
+        <div class="prompt-box" id="D-rubric-prompt"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyPrompt('D-rubric-prompt',this)">📋 複製指令</button>
+          <button class="btn-secondary" onclick="downloadPrompt('D-rubric-prompt','評量規準指令')">⬇ 下載</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="D-panel-feedback">
+      <div class="alert alert-success" style="margin-top:.75rem">
+        <span class="alert-icon">✨</span>
+        <span>這組指令幫你快速為學生作品生成個別化回饋，語言自動調整為符合該年段學生可理解的程度。</span>
+      </div>
+      <div class="card">
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">學生年級<span class="req">*</span></label>
+            <select id="d2-grade">
+              <option value="">請選擇</option>
+              <option value="1">一年級</option><option value="2">二年級</option>
+              <option value="3">三年級</option><option value="4">四年級</option>
+              <option value="5">五年級</option><option value="6">六年級</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">文體<span class="req">*</span></label>
+            <select id="d2-genre">
+              <option value="">請選擇</option>
+              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
+              <option value="說明文">說明文</option><option value="議論文">議論文</option>
+              <option value="童詩">童詩</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">本次寫作題目<span class="req">*</span></label>
+          <input type="text" id="d2-topic" placeholder="例如：一件讓我感謝的事">
+        </div>
+        <div class="field">
+          <label class="field-label">上傳或貼入學生作品<span class="req">*</span></label>
+          <div class="upload-row">
+            <label class="upload-btn" id="d2-img-label" for="d2-img-upload">
+              <span>📷 上傳作品圖片</span>
+              <span class="upload-hint">JPG / PNG</span>
+            </label>
+            <input type="file" id="d2-img-upload" accept="image/*" style="display:none" onchange="handleImgUpload(event,'d2-img-preview','d2-img-note','d2-img-label','d2-img-el')">
+            <label class="upload-btn" id="d2-file-label" for="d2-file-upload">
+              <span>📄 上傳文字檔</span>
+              <span class="upload-hint">TXT</span>
+            </label>
+            <input type="file" id="d2-file-upload" accept=".txt,text/plain" style="display:none" onchange="handleTxtUpload(event,'d2-work','d2-file-label')">
+          </div>
+          <div id="d2-img-preview" style="display:none;margin:.6rem 0;">
+            <img id="d2-img-el" style="max-width:100%;max-height:220px;border-radius:var(--radius);border:1px solid var(--border);" alt="學生作品預覽">
+            <p id="d2-img-note" style="font-size:12px;color:var(--text3);margin-top:.3rem"></p>
+          </div>
+          <div class="divider-or"><hr><span>或直接輸入文字</span><hr></div>
+          <textarea id="d2-work" rows="5" placeholder="將學生的寫作作品文字貼入此處……&#10;&#10;若已上傳圖片，可在此補充說明圖片中看不清楚的部分。"></textarea>
+        </div>
+        <div class="field">
+          <label class="field-label">回饋重點偏好</label>
+          <select id="d2-focus">
+            <option value="均衡回饋（優點＋改善建議＋自修提問）">均衡回饋（優點＋改善建議＋自修提問）</option>
+            <option value="以鼓勵為主，輕描改善方向">以鼓勵為主，輕描改善方向（適合低年段）</option>
+            <option value="深度分析，具體指出結構與語言問題">深度分析，具體指出問題（適合高年段）</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="generateD('feedback')">⚡ 生成AI批閱指令</button>
+      </div>
+      <div class="prompt-output" id="D-feedback-output">
+        <hr class="div">
+        <p class="prompt-section-label">✅ 指令已生成</p>
+        <div class="prompt-box" id="D-feedback-prompt"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyPrompt('D-feedback-prompt',this)">📋 複製指令</button>
+          <button class="btn-secondary" onclick="downloadPrompt('D-feedback-prompt','AI批閱指令')">⬇ 下載</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-panel" id="D-panel-peer">
+      <div class="tip-box teal" style="margin-top:.75rem">
+        <strong>自評互評工具</strong>讓學生學會觀察自己和同學的作品，是培養後設認知能力的關鍵環節，也能大幅減輕教師批閱負擔。
+      </div>
+      <div class="card" style="margin-top:.75rem">
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">年級<span class="req">*</span></label>
+            <select id="d3-grade">
+              <option value="">請選擇</option>
+              <option value="1">一年級</option><option value="2">二年級</option>
+              <option value="3">三年級</option><option value="4">四年級</option>
+              <option value="5">五年級</option><option value="6">六年級</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">文體<span class="req">*</span></label>
+            <select id="d3-genre">
+              <option value="">請選擇</option>
+              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
+              <option value="說明文">說明文</option><option value="童詩">童詩</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">評量工具類型</label>
+          <select id="d3-type">
+            <option value="自評單（學生自己使用）">自評單（學生自己使用）</option>
+            <option value="互評單（同儕互相評閱）">互評單（同儕互相評閱）</option>
+            <option value="自評與互評一體化工具">自評與互評一體化工具</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">本次寫作核心學習目標</label>
+          <textarea id="d3-goal" rows="2" placeholder="例如：能寫出段落分明、有具體事件的記敘文……"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="generateD('peer')">⚡ 生成自評互評指令</button>
+      </div>
+      <div class="prompt-output" id="D-peer-output">
+        <hr class="div">
+        <p class="prompt-section-label">✅ 指令已生成</p>
+        <div class="prompt-box" id="D-peer-prompt"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="copyPrompt('D-peer-prompt',this)">📋 複製指令</button>
+          <button class="btn-secondary" onclick="downloadPrompt('D-peer-prompt','自評互評指令')">⬇ 下載</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>國小寫作AI備課指令系統｜依據108課綱國語文領域學習表現與學習內容設計</p>
+  <p style="margin-top:.3rem">第一～三學習階段（1–6年級）國小版・國中版擴充中</p>
+</footer>
+
+<script>
+/* ══ 課綱知識庫 ══ */
+const STAGE_DATA = {
+  '1':{ stage:'第一學習階段',code:'I',
+    core:'此階段重點為：句子完整性、常用標點符號、仿寫與接寫技巧、積累寫作材料，以及培養寫作興趣。',
+    caution:'⚠️ 注意：本階段尚未要求獨立完整段落，更不涉及文體意識。切勿以中高年段的文體要求命題，否則學生會完全無從下手。',
+    genre_note:'適合文體：仿寫句子、接龍故事、簡短日記（自我介紹格式）、書信卡片。',
+    connect:'【往上銜接】進入三年級後，學生將首次接觸文體概念（記敘、說明、應用）與寫作步驟，現階段打好句子完整性的基礎至關重要。' },
+  '2':{ stage:'第一學習階段',code:'I',
+    core:'此階段重點為：句子完整性、常用標點符號、仿寫與接寫技巧、積累寫作材料，以及培養寫作興趣。',
+    caution:'⚠️ 注意：本階段尚未要求獨立完整段落，更不涉及文體意識。',
+    genre_note:'適合文體：仿寫句子、接龍故事、簡短日記（自我介紹格式）、書信卡片。',
+    connect:'【往上銜接】進入三年級後，學生將首次接觸文體概念與寫作步驟，現階段需打好句子完整性的基礎。' },
+  '3':{ stage:'第二學習階段',code:'II',
+    core:'本階段首次引入文體意識（記敘、說明、應用文本），學生需學習審題、立意、選材、組織等寫作步驟，並開始仿寫童詩。標點符號擴展至15種。',
+    caution:'⚠️ 注意：說明文本在本階段出現但尚無結構要求（結構概念到五年級才正式登場）。議論文在本階段完全不應出現。命題情境應貼近學生生活經驗。',
+    genre_note:'適合文體：記敘文（順敘與倒敘）、說明事物（科學知識、產品）、日記海報等應用文、童詩仿寫。',
+    connect:'【往上銜接】五年級起，說明文本結構與議論文本將正式登場。本階段的選材組織能力，是上述發展的重要基礎。' },
+  '4':{ stage:'第二學習階段',code:'II',
+    core:'本階段首次引入文體意識（記敘、說明、應用文本），學生需學習審題、立意、選材、組織等寫作步驟，並開始仿寫童詩。',
+    caution:'⚠️ 注意：議論文在本階段完全不應出現。說明文尚無結構要求，重在邏輯、客觀的說明態度。',
+    genre_note:'適合文體：記敘文、說明事物、日記海報等應用文、童詩仿寫。',
+    connect:'【往上銜接】四年級末是第二學習階段的收尾，可開始讓學生嘗試「找出作品的錯誤並修改」，為五年級的修改潤飾打基礎。' },
+  '5':{ stage:'第三學習階段',code:'III',
+    core:'⭐ 關鍵節點：說明文本結構在本階段首次正式登場，議論文本也開始萌芽。學生需掌握段落與篇章結構、各種複句，並能書寫說明事理的作品。',
+    caution:'⚠️ 重要提醒：若學生第二學習階段的選材組織基礎不穩，進入本階段將出現明顯斷層。說明文結構（描述、列舉、因果、比較）是本階段的核心新能力，不可略過。',
+    genre_note:'適合文體：說明文（首次要求結構）、記敘文（加入插敘補敘）、初步議論、故事創作、童詩創作。',
+    connect:'【往上銜接國中】六年級後進入國中，學生將面對議論文的完整論點論據要求。五年級若能建立說明文的邏輯結構意識，將大幅降低國中銜接難度。' },
+  '6':{ stage:'第三學習階段',code:'III',
+    core:'本階段是國小寫作能力的總結，也是國中寫作的準備期。學生應能掌握順敘倒敘插敘補敘、直接與間接抒情、說明文結構，並具備修改潤飾的態度與習慣。',
+    caution:'⚠️ 銜接警示：六年級是國小寫作最重要的「出口診斷」時機。建議在學期初確認學生是否真的達到第三學習階段的能力指標，找出仍停留在第二階段甚至更早的學生，進行補救。',
+    genre_note:'適合文體：記敘文（完整敘述技巧）、說明文（完整結構）、初步議論（舉例、正反論證）、童詩創作、故事創作、應用文。',
+    connect:'【銜接國中】學生進入七年級後，寫作要求將大幅提升至五大文體全面展開。六年級教師是學生最後一道「能力補網」的機會，請善用本系統進行學情診斷。' }
+};
+
+/* ══ Tab 切換（修正：傳入按鈕參考，不依賴全域 event）══ */
+function switchMain(btn, id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function switchSrc(module, name) {
+  ['sample','verbal','curriculum'].forEach(t => {
+    const btn = document.getElementById(module+'-tab-'+t);
+    const panel = document.getElementById(module+'-panel-'+t);
+    if(btn) btn.classList.toggle('active', t===name);
+    if(panel) panel.classList.toggle('active', t===name);
+  });
+}
+
+function switchSub(btn, module, name) {
+  document.querySelectorAll('#panel-'+module+' .sub-panel').forEach(p => {
+    p.classList.toggle('active', p.id === module+'-panel-'+name);
+  });
+  document.querySelectorAll('#panel-'+module+' .sub-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ══ Stage Hint ══ */
+function updateStageHint() {
+  const grade = document.getElementById('a-grade').value;
+  const hint = document.getElementById('a-stage-hint');
+  if(!grade){ hint.innerHTML=''; return; }
+  const d = STAGE_DATA[grade];
+  hint.innerHTML = `<div class="knowledge-box" style="margin-top:.75rem">
+    <div class="kb-label">📚 課綱提示｜${grade}年級・${d.stage}（代碼：6-${d.code}）</div>
+    <p>${d.core}</p>
+    <p class="warn">${d.caution}</p>
+    <p>${d.genre_note}</p>
+    <p>${d.connect}</p>
+  </div>`;
+}
+
+/* ══ 上傳處理 ══ */
+function handleImgUpload(event, previewContainerId, noteId, labelId, imgElId) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById(imgElId).src = e.target.result;
+    const container = document.getElementById(previewContainerId);
+    container.style.display = 'block';
+    document.getElementById(noteId).textContent =
+      '已上傳：' + file.name + '（' + Math.round(file.size/1024) + ' KB）。圖片作為診斷參考，請在下方文字區補充說明看不清楚的細節。';
+    const label = document.getElementById(labelId);
+    label.classList.add('has-file');
+    label.querySelector('span').textContent = '✅ 圖片已上傳';
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleTxtUpload(event, textareaId, labelId) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById(textareaId).value = e.target.result;
+    const label = document.getElementById(labelId);
+    label.classList.add('has-file');
+    label.querySelector('span').textContent = '✅ 檔案已載入';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function getImgNote(previewId) {
+  const el = document.getElementById(previewId);
+  return (el && el.style.display !== 'none')
+    ? '\n\n【注意】教師已上傳學生手寫作品圖片。請依據教師在文字區域提供的描述進行診斷，並在報告中說明若能辨識手寫內容，哪些細節對診斷最具參考價值。'
+    : '';
+}
+
+/* ══ 清除（修正：完整重置上傳狀態與所有子輸出）══ */
+function clearModule(m) {
+  document.querySelectorAll('#panel-'+m+' select, #panel-'+m+' textarea, #panel-'+m+' input[type=text]')
+    .forEach(el => el.value='');
+  document.querySelectorAll('#panel-'+m+' .prompt-output').forEach(el => el.classList.remove('show'));
+  if(m==='A'){
+    document.getElementById('a-stage-hint').innerHTML='';
+    ['a-img-preview','d2-img-preview'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.style.display='none';
+    });
+    ['a-img-label','a-file-label'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el){
+        el.classList.remove('has-file');
+        if(id==='a-img-label') el.querySelector('span').textContent='📷 上傳作品圖片';
+        else el.querySelector('span').textContent='📄 上傳文字檔';
+      }
+    });
+    const f1 = document.getElementById('a-img-upload');
+    const f2 = document.getElementById('a-file-upload');
+    if(f1) f1.value='';
+    if(f2) f2.value='';
+  }
+}
+
+/* ══ 複製與下載 ══ */
+function copyPrompt(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ 已複製！';
+    setTimeout(() => btn.innerHTML=orig, 2200);
+  });
+}
+function downloadPrompt(id, filename) {
+  const text = document.getElementById(id).textContent;
+  const blob = new Blob([text],{type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename+'.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ══ MODULE A 生成 ══ */
+function generateA() {
+  const grade = document.getElementById('a-grade').value;
+  const classDesc = document.getElementById('a-class').value.trim();
+  const topic = document.getElementById('a-topic').value.trim();
+  const focus = document.getElementById('a-focus').value.trim();
+  const activeTab = ['sample','verbal','curriculum'].find(t =>
+    document.getElementById('A-panel-'+t).classList.contains('active'));
+  const srcMap = {
+    sample: document.getElementById('a-sample').value.trim(),
+    verbal: document.getElementById('a-verbal').value.trim(),
+    curriculum: document.getElementById('a-curriculum').value.trim()
+  };
+  const srcLabel = {sample:'學生寫作樣本',verbal:'教師口頭描述',curriculum:'課綱與教材文本'};
+  const srcText = srcMap[activeTab];
+  if(!grade||!classDesc||!srcText){
+    alert('請填寫：年級、班級描述，以及診斷素材內容（必填欄位）。'); return;
+  }
+  const d = STAGE_DATA[grade];
+  const topicLine = topic ? `\n本學期預計寫作主題或文體：${topic}` : '';
+  const focusLine = focus ? `\n\n【教師特別希望釐清的問題】\n${focus}` : '';
+  const imgNote = getImgNote('a-img-preview');
+  const prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時具備豐富的國小現場教學輔導經驗。請根據以下資訊，完成一份「學情診斷與課程定位報告」。
+
+【教師基本資訊】
+任教年級：${grade}年級
+課綱對應：${d.stage}（學習表現代碼：6-${d.code}）${topicLine}
+班級現況：${classDesc}
+
+【診斷素材】（來源：${srcLabel[activeTab]}）
+${srcText}${imgNote}
+${focusLine}
+
+請依以下五個部分完成報告：
+
+一、學生能力現況定位
+對照108課綱寫作學習表現指標（6-I 至 6-V），診斷學生目前實際對應的能力層次，並說明判斷依據。若學生整體表現跨越多個階段，請分別說明強項與弱項所在的階段。
+
+二、能力斷點分析
+指出哪些基礎能力出現明顯斷裂或尚未穩固，並說明這些斷點若未補救，將如何影響後續學習階段的銜接。
+
+三、本年段課程視野提示
+說明${grade}年級（${d.stage}）在寫作課程地圖中的定位：「應該要教什麼」「還不需要教什麼」「哪些是本階段的首次登場能力」。請特別提醒教師在命題設計上常見的誤區，以及仿照教材文本命題的侷限。
+
+四、教學起點與補救優先序建議
+根據以上診斷，建議本學期寫作教學的合理起點，並列出補救優先序（最需優先處理的能力斷點排序），說明理由。
+
+五、下一步具體行動建議
+提供2至3個教師可在接下來一週內立即採取的備課行動，語言貼近現場，避免學術化表述。
+
+注意：請使用繁體中文，語氣專業但親切，如同一位資深輔導教師與現場老師的對話。`;
+
+  document.getElementById('A-prompt-text').textContent = prompt;
+  document.getElementById('A-output').classList.add('show');
+  document.getElementById('A-knowledge-box').innerHTML =
+    `<div class="knowledge-box" style="margin-top:1rem">
+      <div class="kb-label">📚 課綱關鍵節點｜${grade}年級・${d.stage}</div>
+      <p>${d.core}</p>
+      <p class="warn">${d.caution}</p>
+      <p>${d.genre_note}</p>
+      <p>${d.connect}</p>
+    </div>`;
+  document.getElementById('A-output').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ══ MODULE B 生成 ══ */
+function generateB() {
+  const grade = document.getElementById('b-grade').value;
+  const hours = document.getElementById('b-hours').value;
+  const genre = document.getElementById('b-genre').value;
+  if(!grade||!hours||!genre){ alert('請填寫：年級、授課節數、文體（必填欄位）。'); return; }
+  const topic   = document.getElementById('b-topic').value.trim();
+  const text    = document.getElementById('b-text').value.trim();
+  const base    = document.getElementById('b-base').value.trim();
+  const special = document.getElementById('b-special').value.trim();
+  const skill   = document.getElementById('b-skill').value;
+  const revise  = document.getElementById('b-revise').value;
+  const d = STAGE_DATA[grade];
+  const prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請根據以下資訊，設計一份完整的單元寫作教學計畫。
+
+【基本設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+預計授課節數：${hours}節課
+寫作文體：${genre}${topic?'\n寫作題目或主題：'+topic:''}${text?'\n對應課文或文本：'+text:''}${base?'\n學生已具備的基礎：'+base:''}${special?'\n特殊需求或限制：'+special:''}
+寫作技巧教學重點：${skill||'請依年段建議最適切的技巧'}
+是否納入修改潤飾：${revise}
+
+【課綱對應提示】
+${d.core}
+${d.genre_note}
+
+請依以下結構完成教學計畫：
+
+一、單元教學目標（3至4條，以學生為主語，對應108課綱學習表現指標，請標示指標代碼）
+
+二、教學流程架構（依節數分配，每節說明：時間分配、教師教學活動、學生學習活動、核心任務）
+
+三、「寫前—寫中—寫後」教學要點
+- 寫前激發（如何幫助學生進入寫作狀態、積累素材）
+- 寫中支持（課堂中給予什麼鷹架與協助）
+- 寫後回饋（如何處理學生作品）
+
+四、命題設計建議
+根據本年段課綱要求，提供2至3個適切的命題選項，並說明各命題的難度差異與適用情況。請特別提醒本文體在本年段的命題禁區（常見過深或過淺的命題錯誤）。
+
+五、本年段關鍵提醒
+說明本次教學在整個國小寫作課程地圖中的位置，以及與上下學習階段的銜接關係。
+
+請使用繁體中文，語言專業但貼近現場，避免純學術論述。`;
+
+  document.getElementById('B-prompt-text').textContent = prompt;
+  document.getElementById('B-output').classList.add('show');
+  document.getElementById('B-knowledge-box').innerHTML =
+    `<div class="knowledge-box" style="margin-top:1rem">
+      <div class="kb-label">📚 課綱關鍵節點｜${grade}年級・${d.stage}・${genre}</div>
+      <p>${d.core}</p><p class="warn">${d.caution}</p><p>${d.connect}</p>
+    </div>`;
+  document.getElementById('B-output').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ══ MODULE C 生成 ══ */
+function generateC(type) {
+  const num = {form:'1',content:'2',diff:'3'}[type];
+  const grade = document.getElementById('c'+num+'-grade').value;
+  const genre = document.getElementById('c'+num+'-genre').value;
+  if(!grade||!genre){ alert('請選擇年級與文體。'); return; }
+  const d = STAGE_DATA[grade];
+  let prompt = '';
+
+  if(type==='form'){
+    const focus = document.getElementById('c1-focus').value.trim();
+    const extra = document.getElementById('c1-extra').value.trim();
+    if(!focus){ alert('請填寫核心寫作技巧或結構重點。'); return; }
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請為以下教學情境設計形式鷹架教材。
+
+【教學設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+寫作文體：${genre}
+核心寫作技巧或結構重點：${focus}${extra?'\n其他需求：'+extra:''}
+
+【形式鷹架設計要求】
+
+一、結構圖示
+設計一份學生可直接填寫的「${genre}寫作結構圖」，標示各部分的功能與提示問題（用文字描述圖示設計，教師可依此製作學習單）。
+
+二、示範句型組（3組）
+針對「${focus}」，提供3組示範句型，每組包含：句型公式、範例句（2句）、說明（這個句型用在什麼時候）。語言難度需符合${grade}年級學生程度。
+
+三、引導提問（5題）
+設計5個引導學生思考「${focus}」的課堂提問，由淺入深排列，並標示每題的教學目的。
+
+四、教師使用說明
+說明這套形式鷹架的使用時機（寫前/寫中/寫後）、使用順序，以及常見操作錯誤。
+
+請使用繁體中文，語言貼近國小現場。`;
+
+  } else if(type==='content'){
+    const topic  = document.getElementById('c2-topic').value.trim();
+    const focus  = document.getElementById('c2-focus').value;
+    const script = document.getElementById('c2-script').value;
+    if(!topic){ alert('請填寫寫作主題。'); return; }
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請為以下教學情境設計內容鷹架教材。
+
+【教學設定】
+任教年級：${grade}年級（${d.stage}）
+寫作文體：${genre}
+寫作主題：${topic}
+鷹架著重方向：${focus}
+課堂引導腳本：${script}
+
+【內容鷹架設計要求】
+
+一、觀察與感知提問（5至7題）
+幫助學生「打開感官」，從生活經驗中找到可以寫的素材。問題需具體、貼近${grade}年級學生的生活，避免抽象問法。
+
+二、素材組織引導
+提供一份「素材整理表」的設計方案（用文字描述），幫助學生把想到的東西有系統地整理成可以寫作的材料。
+
+三、情感或思想深化提示（3至5題）
+幫助學生從「描述事情」進一步深化到「表達感受或想法」，引導語言需符合${grade}年級程度。
+${script==='是，請提供師生對話腳本'?`
+四、師生課堂對話引導腳本
+設計一段完整的師生對話腳本（約8至12個來回），示範教師如何運用上述提問引導學生進入寫作狀態。腳本中需標示教師的引導意圖。`:''}
+
+請使用繁體中文，語言親切自然，如同老師真實的課堂對話。`;
+
+  } else {
+    const topic = document.getElementById('c3-topic').value.trim();
+    const dist  = document.getElementById('c3-dist').value.trim();
+    if(!topic){ alert('請填寫共同寫作題目或主題。'); return; }
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請為以下教學情境設計分層差異化寫作任務。
+
+【教學設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+寫作文體：${genre}
+共同寫作題目或主題：${topic}${dist?'\n班級學生能力分布：'+dist:''}
+
+【分層任務設計要求】
+針對同一寫作主題，設計三個能力層次的任務版本。
+
+【基礎層】（對應能力較弱或停留在前一學習階段的學生）
+- 任務說明：（清楚描述這個層次的學生需要完成什麼）
+- 提供的鷹架支持：（具體說明給予什麼形式支持）
+- 對應課綱指標：（標示代碼）
+- 評量重點：（這個層次最重要看什麼）
+
+【發展層】（對應本年段基本水準的學生）
+- 任務說明
+- 提供的鷹架支持
+- 對應課綱指標
+- 評量重點
+
+【深化層】（對應能力較強或已穩固本階段基礎的學生）
+- 任務說明
+- 提供的鷹架支持
+- 對應課綱指標
+- 評量重點
+
+最後請說明：教師如何在課堂中管理三個層次的任務（操作建議），以及如何讓不同層次的學生都有成就感。
+
+請使用繁體中文，語言貼近國小現場。`;
+  }
+
+  const outId    = 'C-'+type+'-output';
+  const promptId = 'C-'+type+'-prompt';
+  document.getElementById(promptId).textContent = prompt;
+  document.getElementById(outId).classList.add('show');
+  document.getElementById(outId).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ══ MODULE D 生成 ══ */
+function generateD(type) {
+  const num = {rubric:'1',feedback:'2',peer:'3'}[type];
+  const grade = document.getElementById('d'+num+'-grade').value;
+  const genre = document.getElementById('d'+num+'-genre').value;
+  if(!grade||!genre){ alert('請選擇年級與文體。'); return; }
+  const d = STAGE_DATA[grade];
+  let prompt = '';
+
+  if(type==='rubric'){
+    const goal  = document.getElementById('d1-goal').value.trim();
+    const level = document.getElementById('d1-level').value;
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請設計一份完整的寫作評量規準（Rubric）。
+
+【評量設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+寫作文體：${genre}${goal?'\n本次核心教學目標：'+goal:''}
+評量層級：${level}
+
+【評量規準設計要求】
+
+一、評量向度設定（3至5個向度）
+根據108課綱本學習階段的學習表現與文本表述要求，設定最適切的評量向度，並說明各向度在本年段的特殊考量。
+
+二、各向度評量規準表
+以表格形式呈現（文字描述），每個層級需有具體可觀察的行為描述，避免「寫得很好」等空泛用語。
+
+三、教師觀察重點提示
+說明評閱時應特別注意什麼、哪些是本年段典型的錯誤或盲點、如何在有限時間內高效批閱。
+
+四、學生版對照說明
+將評量重點轉化為學生可理解的語言（適合${grade}年級），讓學生在寫作前就清楚知道「什麼樣的作品算好」。
+
+請使用繁體中文，實用為先。`;
+
+  } else if(type==='feedback'){
+    const topic = document.getElementById('d2-topic').value.trim();
+    const work  = document.getElementById('d2-work').value.trim();
+    const focus = document.getElementById('d2-focus').value;
+    const imgNote = getImgNote('d2-img-preview');
+    if(!topic||(!work&&!imgNote)){ alert('請填寫寫作題目與學生作品（文字或圖片）。'); return; }
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時善於以鼓勵、具體的語言與學生溝通。
+
+【批閱設定】
+學生年級：${grade}年級（${d.stage}）
+寫作文體：${genre}
+寫作題目：${topic}
+回饋風格：${focus}
+
+【學生作品】
+${work||'（請參考已上傳的圖片作品）'}${imgNote}
+
+請依以下結構提供個別化回饋：
+
+一、三項具體優點
+指出作品中真實的亮點，每項優點需說明「在哪裡」「好在哪裡」，避免空泛稱讚。語言需符合${grade}年級學生可理解的程度。
+
+二、最需優先改善的兩個面向
+每個面向說明：問題在哪裡、為什麼需要改善、具體的改善方向（可舉例示範）。語言需鼓勵而非批評。
+
+三、一個引導自我修改的提問
+設計一個開放性問題，引導學生自己發現並思考如何改善作品，而非直接告知答案。
+
+四、教師使用提示
+說明這份回饋的使用建議（例如：是否適合直接給學生、口頭還是書面回饋、後續追蹤建議）。
+
+請使用繁體中文。`;
+
+  } else {
+    const evalType = document.getElementById('d3-type').value;
+    const goal     = document.getElementById('d3-goal').value.trim();
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請設計一份學生${evalType}。
+
+【設計設定】
+年級：${grade}年級（${d.stage}）
+寫作文體：${genre}
+工具類型：${evalType}${goal?'\n本次核心學習目標：'+goal:''}
+
+【設計要求】
+
+一、工具設計原則說明
+說明針對${grade}年級學生設計此工具時的特殊考量（認知發展、語言能力、同儕關係等）。
+
+二、${evalType}表格
+設計可直接印製使用的表格（以文字描述版面配置），包含：
+- 3至5個觀察向度（以學生能理解的語言表達，避免學術用語）
+- 每個向度對應的具體觀察提示或例子
+- 整體感受欄位
+- 給同學（或自己）的一句話
+
+三、使用說明（教師版）
+說明如何在課堂中操作此工具、需要多少時間、可能遇到的問題與解決方式。
+
+四、使用說明（學生版）
+以${grade}年級學生看得懂的語言，說明如何使用這份工具。
+
+請使用繁體中文，語言親切，學生版說明尤其需要口語化。`;
+  }
+
+  const outId    = 'D-'+type+'-output';
+  const promptId = 'D-'+type+'-prompt';
+  document.getElementById(promptId).textContent = prompt;
+  document.getElementById(outId).classList.add('show');
+  document.getElementById(outId).scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
