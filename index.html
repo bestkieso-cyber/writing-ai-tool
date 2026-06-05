@@ -56,6 +56,12 @@ body {
   border-radius:20px; font-weight:500; letter-spacing:.05em;
 }
 .header-note { margin-left:auto; font-size:12px; color:var(--purple-200); }
+.header-credit {
+  font-size:11px; color:rgba(175,169,236,0.8);
+  letter-spacing:.04em; padding-left:1rem;
+  border-left:1px solid rgba(255,255,255,0.12);
+  white-space:nowrap;
+}
 
 /* ── Intro Banner ── */
 .intro-banner {
@@ -287,6 +293,7 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
   <div class="site-logo">國小寫作<span>AI</span>備課系統</div>
   <span class="site-badge">108課綱・國小版</span>
   <span class="header-note">第一～三學習階段｜1–6年級</span>
+  <span class="header-credit">國教中央團國語文分團輔導員　賴靜慧　設計</span>
 </header>
 
 <div class="intro-banner">
@@ -480,13 +487,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
           <label class="field-label">寫作文體<span class="req">*</span></label>
           <select id="b-genre">
             <option value="">請選擇文體</option>
-            <option value="記敘文本">記敘文本（以人事時地物為敘寫對象）</option>
+            <option value="記敘文本">記敘文本（敘寫人事時地物）</option>
             <option value="抒情文本">抒情文本（抒發對人事物景之情感）</option>
             <option value="說明文本">說明文本（邏輯客觀說明事物事理）</option>
             <option value="議論文本">議論文本（以論點論據表達看法）</option>
-            <option value="應用文本">應用文本（日記、書信、海報等）</option>
-            <option value="童詩">童詩／新詩</option>
-            <option value="故事">故事創作</option>
+            <option value="應用文本">應用文本（日記、書信、海報、說明書等）</option>
+            <option value="童詩／新詩">童詩／新詩（模仿創作韻文）</option>
+            <option value="故事創作">故事創作（敘事性創意寫作）</option>
           </select>
         </div>
         <div class="field">
@@ -587,9 +594,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
             <label class="field-label">文體<span class="req">*</span></label>
             <select id="c1-genre">
               <option value="">請選擇</option>
-              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
-              <option value="說明文">說明文</option><option value="議論文">議論文</option>
-              <option value="應用文">應用文</option><option value="童詩">童詩</option>
+              <option value="記敘文本">記敘文本</option>
+              <option value="抒情文本">抒情文本</option>
+              <option value="說明文本">說明文本</option>
+              <option value="議論文本">議論文本</option>
+              <option value="應用文本">應用文本</option>
+              <option value="童詩／新詩">童詩／新詩</option>
+              <option value="故事創作">故事創作</option>
             </select>
           </div>
         </div>
@@ -633,9 +644,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
             <label class="field-label">文體<span class="req">*</span></label>
             <select id="c2-genre">
               <option value="">請選擇</option>
-              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
-              <option value="說明文">說明文</option><option value="議論文">議論文</option>
-              <option value="童詩">童詩</option>
+              <option value="記敘文本">記敘文本</option>
+              <option value="抒情文本">抒情文本</option>
+              <option value="說明文本">說明文本</option>
+              <option value="議論文本">議論文本</option>
+              <option value="應用文本">應用文本</option>
+              <option value="童詩／新詩">童詩／新詩</option>
+              <option value="故事創作">故事創作</option>
             </select>
           </div>
         </div>
@@ -691,9 +706,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
             <label class="field-label">文體<span class="req">*</span></label>
             <select id="c3-genre">
               <option value="">請選擇</option>
-              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
-              <option value="說明文">說明文</option><option value="議論文">議論文</option>
-              <option value="童詩">童詩</option>
+              <option value="記敘文本">記敘文本</option>
+              <option value="抒情文本">抒情文本</option>
+              <option value="說明文本">說明文本</option>
+              <option value="議論文本">議論文本</option>
+              <option value="應用文本">應用文本</option>
+              <option value="童詩／新詩">童詩／新詩</option>
+              <option value="故事創作">故事創作</option>
             </select>
           </div>
         </div>
@@ -751,9 +770,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
             <label class="field-label">文體<span class="req">*</span></label>
             <select id="d1-genre">
               <option value="">請選擇</option>
-              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
-              <option value="說明文">說明文</option><option value="議論文">議論文</option>
-              <option value="童詩">童詩</option><option value="應用文">應用文</option>
+              <option value="記敘文本">記敘文本</option>
+              <option value="抒情文本">抒情文本</option>
+              <option value="說明文本">說明文本</option>
+              <option value="議論文本">議論文本</option>
+              <option value="應用文本">應用文本</option>
+              <option value="童詩／新詩">童詩／新詩</option>
+              <option value="故事創作">故事創作</option>
             </select>
           </div>
         </div>
@@ -804,9 +827,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
             <label class="field-label">文體<span class="req">*</span></label>
             <select id="d2-genre">
               <option value="">請選擇</option>
-              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
-              <option value="說明文">說明文</option><option value="議論文">議論文</option>
-              <option value="童詩">童詩</option>
+              <option value="記敘文本">記敘文本</option>
+              <option value="抒情文本">抒情文本</option>
+              <option value="說明文本">說明文本</option>
+              <option value="議論文本">議論文本</option>
+              <option value="應用文本">應用文本</option>
+              <option value="童詩／新詩">童詩／新詩</option>
+              <option value="故事創作">故事創作</option>
             </select>
           </div>
         </div>
@@ -877,8 +904,13 @@ hr.div { border:none; border-top:1px solid var(--border); margin:1.5rem 0; }
             <label class="field-label">文體<span class="req">*</span></label>
             <select id="d3-genre">
               <option value="">請選擇</option>
-              <option value="記敘文">記敘文</option><option value="抒情文">抒情文</option>
-              <option value="說明文">說明文</option><option value="童詩">童詩</option>
+              <option value="記敘文本">記敘文本</option>
+              <option value="抒情文本">抒情文本</option>
+              <option value="說明文本">說明文本</option>
+              <option value="議論文本">議論文本</option>
+              <option value="應用文本">應用文本</option>
+              <option value="童詩／新詩">童詩／新詩</option>
+              <option value="故事創作">故事創作</option>
             </select>
           </div>
         </div>
