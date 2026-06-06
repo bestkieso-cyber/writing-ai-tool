@@ -16,27 +16,27 @@
 /* ── Reset & Base ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* 主色：溫暖赭陶大地色 */
-  --terra:#7C3D1A; --terra2:#9B4E22; --terra3:#B8652E;
-  --terra-light:#D4845A; --terra-pale:#FAE8DC; --terra-mist:#FDF3ED;
-  /* 輔色：奶油暖黃 */
-  --cream:#F5E6C8; --cream2:#EDD9A3; --cream3:#C8A84B;
-  --cream-dark:#8B6914;
-  /* 中性大地色 */
-  --ink:#2C1A0E; --ink2:#5C3D2A; --ink3:#9A7060;
-  --parchment:#FDFAF5; --parchment2:#F7F0E6; --parchment3:#EDE3D4;
-  --border:rgba(124,61,26,0.12); --border2:rgba(124,61,26,0.22);
-  /* 功能色（保留原有） */
-  --teal:#0E6655; --teal2:#148A70; --teal-pale:#D5F0E8;
-  --amber:#6B4C00; --amber-pale:#FDF0CC;
-  --red:#8B1A1A; --red-pale:#F5E0E0;
-  --blue-pale:#E6F1FB; --blue:#0C447C;
-  --green-pale:#EAF3DE; --green:#3B6D11;
+  /* 主色：莫蘭迪奶茶藕粉——霧化赭棕，大量灰調壓低彩度 */
+  --terra:#7D5A4F; --terra2:#8E6B60; --terra3:#A07D72;
+  --terra-light:#C4A49C; --terra-pale:#F5EDE9; --terra-mist:#FBF7F5;
+  /* 輔色：莫蘭迪奶油米——低彩度暖黃 */
+  --cream:#E8D5B0; --cream2:#D4BC8E; --cream3:#9E8050;
+  --cream-dark:#6B5430;
+  /* 中性大地色——帶灰 */
+  --ink:#352820; --ink2:#5A4035; --ink3:#9A8078;
+  --parchment:#FDFBF8; --parchment2:#F5F0EA; --parchment3:#EAE2D8;
+  --border:rgba(125,90,79,0.1); --border2:rgba(125,90,79,0.2);
+  /* 功能色 */
+  --teal:#4A7B6F; --teal2:#5A9082; --teal-pale:#E0F0EB;
+  --amber:#7A6035; --amber-pale:#F5EDD0;
+  --red:#8B4040; --red-pale:#F5E4E4;
+  --blue-pale:#E8EFF8; --blue:#3D5A80;
+  --green-pale:#E4EFE0; --green:#4A7040;
   /* 通用 */
-  --r:6px; --rl:10px; --rxl:14px;
-  --radius:6px; --radius-lg:10px; --radius-xl:14px;
-  --shadow:0 1px 4px rgba(124,61,26,0.1);
-  --shadow-md:0 4px 16px rgba(124,61,26,0.14);
+  --r:8px; --rl:12px; --rxl:16px;
+  --radius:8px; --radius-lg:12px; --radius-xl:16px;
+  --shadow:0 1px 4px rgba(125,90,79,0.08),0 2px 8px rgba(125,90,79,0.05);
+  --shadow-md:0 4px 16px rgba(125,90,79,0.12);
 }
 html{scroll-behavior:smooth}
 body{
@@ -73,7 +73,7 @@ body{
 
 /* ── Hero Banner ── */
 .hero{
-  background:linear-gradient(150deg,var(--terra) 0%,var(--terra2) 55%,var(--terra3) 100%);
+  background:linear-gradient(150deg,#6B4D43 0%,#7D5A4F 50%,#8E6B60 100%);
   padding:2.5rem 2rem 2.25rem; position:relative; overflow:hidden;
 }
 .hero::before{
@@ -316,6 +316,13 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
   border:1px solid var(--terra-pale); border-radius:var(--r);
   padding:.4rem .75rem; margin-top:.35rem; display:none; line-height:1.5;
 }
+/* ── 貼入提醒 ── */
+.paste-reminder{
+  font-size:12px; color:var(--amber); background:var(--amber-pale);
+  border:1px solid #D4B56A; border-radius:var(--r);
+  padding:.65rem 1rem; margin-top:.75rem; line-height:1.65;
+}
+.paste-reminder strong{font-weight:600;}
 </style>
 </head>
 <body>
@@ -469,6 +476,9 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
       <button class="btn-primary" onclick="generateA()">⚡ 生成學情診斷指令</button>
       <button class="btn-secondary" onclick="clearModule('A')">↺ 清除重填</button>
     </div>
+    <p class="paste-reminder" id="A-paste-reminder" style="display:none">
+      💡 <strong>貼入AI平台時請記得：</strong>若你選擇的是「學生寫作樣本」，請將學生作品一併複製貼在指令之後，診斷效果會更精準。若已上傳圖片，請在圖片下方說明無法辨識的手寫細節。
+    </p>
 
     <div class="prompt-output" id="A-output">
       <hr class="div">
@@ -1034,27 +1044,27 @@ const STAGE_DATA = {
 const STAGE_GENRES = {
   '1': {
     genres: [],
-    note: '一年級（第一學習階段）：本階段重點為句子完整性、標點符號、仿寫接寫，尚無文體概念，請於下方說明具體寫作任務。'
+    note: '📌 一年級（第一學習階段）：本階段尚無文體概念。課綱重點為——句子完整性、常用標點符號（Ac-I-1）、仿寫接寫技巧（6-I-4）、積累寫作材料（6-I-2）。生成的指令將以「句段基礎建立」為核心，請在下方說明具體的寫作任務內容。'
   },
   '2': {
     genres: [],
-    note: '二年級（第一學習階段）：本階段重點為句子完整性、標點符號、仿寫接寫，尚無文體概念，請於下方說明具體寫作任務。'
+    note: '📌 二年級（第一學習階段）：本階段尚無文體概念。課綱重點為——語意完整的句子與主題明確的段落（6-I-3）、仿寫接寫（6-I-4）、修改文句錯誤（6-I-5）、培養寫作興趣（6-I-6）。生成的指令將以「句段基礎建立」為核心，請在下方說明具體的寫作任務內容。'
   },
   '3': {
-    genres: ['記敘文本','應用文本','說明文本（初步）','童詩／新詩（仿寫）'],
-    note: '三年級（第二學習階段）：本階段文體首次登場，限記敘、應用、說明（初步）與童詩仿寫。議論文本、抒情文本、故事創作尚未列入課綱要求。'
+    genres: ['記敘文本','抒情文本','說明文本（初步）','應用文本','童詩／新詩（仿寫）','故事'],
+    note: '📌 三年級（第二學習階段）：適用文體——記敘（Ba-Ⅱ）、抒情（Bb-Ⅱ，含直接抒情與間接抒情）、說明（Bc-Ⅱ，初步，尚無結構要求）、應用文（Be-Ⅱ）、童詩仿寫（6-Ⅱ-5）、故事（Ad-Ⅱ-3）。⚠️ 議論文本在本階段完全不應出現。'
   },
   '4': {
-    genres: ['記敘文本','應用文本','說明文本（初步）','童詩／新詩（仿寫）'],
-    note: '四年級（第二學習階段）：適用文體同三年級。說明文尚無結構要求，重在邏輯客觀的說明態度。議論文本完全不應出現。'
+    genres: ['記敘文本','抒情文本','說明文本（初步）','應用文本','童詩／新詩（仿寫）','故事'],
+    note: '📌 四年級（第二學習階段）：適用文體同三年級。說明文尚無結構要求，重在邏輯客觀的說明態度；抒情文本含直接抒情（Bb-Ⅱ-4）與藉敘事景物間接抒情（Bb-Ⅱ-5）。⚠️ 議論文本在本階段完全不應出現。'
   },
   '5': {
     genres: ['記敘文本','抒情文本','說明文本','議論文本（初步）','應用文本','童詩／新詩','故事創作'],
-    note: '五年級（第三學習階段）：說明文本結構首次正式登場，議論文本開始萌芽，故事創作與童詩創作全面開放。七種文體完整適用。'
+    note: '⭐ 五年級（第三學習階段）關鍵節點：說明文本結構首次正式登場（Bc-Ⅲ-4）；議論文本開始萌芽（Bd-Ⅲ）；抒情文本加入對自然與生命的感悟（Bb-Ⅲ-3）；故事創作與童詩創作正式列入（6-Ⅲ-4）。七種文體完整適用。'
   },
   '6': {
     genres: ['記敘文本','抒情文本','說明文本','議論文本（初步）','應用文本','童詩／新詩','故事創作'],
-    note: '六年級（第三學習階段）：七種文體完整適用。本年段是國小寫作能力總結，也是國中的準備期，議論文本仍為初步萌芽階段。'
+    note: '⭐ 六年級（第三學習階段）：七種文體完整適用。本年段是國小寫作能力總結，也是國中銜接的準備期。議論文本仍為初步萌芽（舉例、正反論證），尚未要求完整論點論據論證架構。'
   }
 };
 
@@ -1268,6 +1278,9 @@ ${focusLine}
       <p>${d.connect}</p>
     </div>`;
   document.getElementById('A-output').scrollIntoView({behavior:'smooth',block:'start'});
+  // 只有使用學生樣本時才顯示貼入提醒
+  const reminder = document.getElementById('A-paste-reminder');
+  if(reminder) reminder.style.display = (activeTab === 'sample') ? 'block' : 'none';
 }
 
 /* ══ MODULE B 生成 ══ */
