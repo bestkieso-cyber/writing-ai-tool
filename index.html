@@ -16,27 +16,27 @@
 /* ── Reset & Base ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* 主色：莫蘭迪奶茶藕粉——霧化赭棕，大量灰調壓低彩度 */
-  --terra:#7D5A4F; --terra2:#8E6B60; --terra3:#A07D72;
-  --terra-light:#C4A49C; --terra-pale:#F5EDE9; --terra-mist:#FBF7F5;
-  /* 輔色：莫蘭迪奶油米——低彩度暖黃 */
-  --cream:#E8D5B0; --cream2:#D4BC8E; --cream3:#9E8050;
-  --cream-dark:#6B5430;
-  /* 中性大地色——帶灰 */
-  --ink:#352820; --ink2:#5A4035; --ink3:#9A8078;
-  --parchment:#FDFBF8; --parchment2:#F5F0EA; --parchment3:#EAE2D8;
-  --border:rgba(125,90,79,0.1); --border2:rgba(125,90,79,0.2);
-  /* 功能色 */
-  --teal:#4A7B6F; --teal2:#5A9082; --teal-pale:#E0F0EB;
-  --amber:#7A6035; --amber-pale:#F5EDD0;
-  --red:#8B4040; --red-pale:#F5E4E4;
-  --blue-pale:#E8EFF8; --blue:#3D5A80;
-  --green-pale:#E4EFE0; --green:#4A7040;
+  /* 主色：莫蘭迪鼠尾草綠——帶灰調的霧化橄欖綠 */
+  --sage:#4E6B58; --sage2:#5A7A65; --sage3:#6B8C75;
+  --sage-light:#9BB8A4; --sage-pale:#E8F0EB; --sage-mist:#F3F7F4;
+  /* 輔色：莫蘭迪溫暖米——低彩度奶油，呼應附圖木質與沙發色 */
+  --cream:#E8D9C0; --cream2:#D4C0A0; --cream3:#A08060;
+  --cream-dark:#6B5440;
+  /* 中性色——帶綠灰調 */
+  --ink:#243028; --ink2:#445048; --ink3:#8A9890;
+  --parchment:#F8FAF8; --parchment2:#EFF4F0; --parchment3:#E0EBE3;
+  --border:rgba(78,107,88,0.12); --border2:rgba(78,107,88,0.22);
+  /* 功能色——莫蘭迪化 */
+  --teal:#3D7068; --teal2:#4A8278; --teal-pale:#DCF0EC;
+  --amber:#7A6535; --amber-pale:#F5EDD0;
+  --red:#7A4040; --red-pale:#F5E4E4;
+  --blue-pale:#E8EFF8; --blue:#3D5A78;
+  --green-pale:#E0EBE3; --green:#4A6840;
   /* 通用 */
   --r:8px; --rl:12px; --rxl:16px;
   --radius:8px; --radius-lg:12px; --radius-xl:16px;
-  --shadow:0 1px 4px rgba(125,90,79,0.08),0 2px 8px rgba(125,90,79,0.05);
-  --shadow-md:0 4px 16px rgba(125,90,79,0.12);
+  --shadow:0 1px 4px rgba(78,107,88,0.08),0 2px 8px rgba(78,107,88,0.05);
+  --shadow-md:0 4px 16px rgba(78,107,88,0.12);
 }
 html{scroll-behavior:smooth}
 body{
@@ -47,23 +47,23 @@ body{
 
 /* ── Header ── */
 .site-header{
-  background:var(--terra);
+  background:var(--sage);
   padding:0 2rem; height:56px;
   display:flex; align-items:center; gap:1rem;
   position:sticky; top:0; z-index:200;
-  box-shadow:0 2px 12px rgba(124,61,26,0.3);
+  box-shadow:0 2px 12px rgba(36,48,40,0.25);
 }
 .logo-mark{
   font-family:'Noto Sans TC',sans-serif;
   font-size:16px; font-weight:600;
-  color:var(--terra-pale); letter-spacing:.02em;
+  color:var(--sage-pale); letter-spacing:.02em;
 }
 .logo-mark em{color:var(--cream); font-style:normal;}
 .header-badges{display:flex; gap:.4rem; margin-left:.25rem;}
 .badge{font-size:10px;font-weight:600;letter-spacing:.06em;padding:2px 8px;border-radius:20px;}
-.badge-main{background:rgba(255,255,255,0.18); color:#FDFAF5;}
-.badge-grade{background:rgba(255,255,255,0.1); color:var(--terra-pale);}
-.header-sub{margin-left:auto; font-size:12px; color:var(--terra-pale); opacity:.85;}
+.badge-main{background:rgba(255,255,255,0.18); color:#F3F7F4;}
+.badge-grade{background:rgba(255,255,255,0.1); color:var(--sage-pale);}
+.header-sub{margin-left:auto; font-size:12px; color:var(--sage-pale); opacity:.85;}
 .header-credit{
   font-size:11px; color:var(--cream);
   letter-spacing:.04em; padding-left:1rem;
@@ -73,26 +73,26 @@ body{
 
 /* ── Hero Banner ── */
 .hero{
-  background:linear-gradient(150deg,#6B4D43 0%,#7D5A4F 50%,#8E6B60 100%);
+  background:linear-gradient(150deg,#3D5548 0%,#4E6B58 50%,#5A7A65 100%);
   padding:2.5rem 2rem 2.25rem; position:relative; overflow:hidden;
 }
 .hero::before{
   content:''; position:absolute; inset:0;
-  background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3Ccircle cx='0' cy='0' r='3'/%3E%3Ccircle cx='80' cy='0' r='3'/%3E%3Ccircle cx='0' cy='80' r='3'/%3E%3Ccircle cx='80' cy='80' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Ccircle cx='40' cy='40' r='3'/%3E%3Ccircle cx='0' cy='0' r='3'/%3E%3Ccircle cx='80' cy='0' r='3'/%3E%3Ccircle cx='0' cy='80' r='3'/%3E%3Ccircle cx='80' cy='80' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 .hero-inner{max-width:860px; margin:0 auto; position:relative;}
 .hero h1{
   font-family:'Noto Sans TC',sans-serif;
-  font-size:20px; font-weight:600; color:#FDFAF5;
+  font-size:20px; font-weight:600; color:#F3F7F4;
   margin-bottom:.5rem; line-height:1.5;
 }
 .hero h1 span{color:var(--cream);}
-.hero-desc{font-size:13px; color:rgba(253,243,237,0.8); line-height:1.7; max-width:620px; margin-bottom:1.25rem;}
+.hero-desc{font-size:13px; color:rgba(232,240,235,0.8); line-height:1.7; max-width:620px; margin-bottom:1.25rem;}
 .hero-note{
   display:inline-flex; align-items:center; gap:.5rem;
   background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
   border-radius:var(--r); padding:.5rem 1rem;
-  font-size:12px; color:var(--terra-pale); line-height:1.5;
+  font-size:12px; color:var(--sage-pale); line-height:1.5;
 }
 .hero-note strong{color:var(--cream);}
 .flow-row{display:flex; align-items:center; gap:.5rem; margin-top:1.25rem; flex-wrap:wrap;}
@@ -100,11 +100,11 @@ body{
   display:flex; align-items:center; gap:.4rem;
   background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18);
   border-radius:var(--r); padding:.4rem .85rem;
-  font-size:12px; color:var(--terra-pale); font-weight:500;
+  font-size:12px; color:var(--sage-pale); font-weight:500;
 }
 .flow-step-num{
   width:18px; height:18px; border-radius:50%;
-  background:var(--cream); color:var(--terra);
+  background:var(--cream); color:var(--sage);
   display:flex; align-items:center; justify-content:center;
   font-size:10px; font-weight:700; flex-shrink:0;
 }
@@ -129,8 +129,8 @@ body{
   cursor:pointer; transition:all .18s; font-weight:500;
   line-height:1.3; text-align:center;
 }
-.tab-nav-btn:hover{background:var(--terra-mist); color:var(--terra);}
-.tab-nav-btn.active{background:var(--terra); color:var(--terra-pale); box-shadow:var(--shadow);}
+.tab-nav-btn:hover{background:var(--sage-mist); color:var(--sage);}
+.tab-nav-btn.active{background:var(--sage); color:var(--sage-pale); box-shadow:var(--shadow);}
 .tab-nav-btn .tab-icon{font-size:16px;}
 
 .tab-panel{display:none;}
@@ -144,7 +144,7 @@ body{
   font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
   padding:4px 10px; border-radius:20px; margin-bottom:.75rem;
 }
-.tag-a{background:var(--terra-pale); color:var(--terra);}
+.tag-a{background:var(--sage-pale); color:var(--sage);}
 .tag-b{background:var(--teal-pale); color:var(--teal);}
 .tag-c{background:var(--amber-pale); color:var(--amber);}
 .tag-d{background:var(--green-pale); color:var(--green);}
@@ -178,7 +178,7 @@ select,textarea,input[type="text"]{
 select{height:40px; cursor:pointer;}
 textarea{resize:vertical; min-height:80px; line-height:1.65;}
 select:focus,textarea:focus,input[type="text"]:focus{
-  border-color:var(--terra3);
+  border-color:var(--sage3);
   box-shadow:0 0 0 3px rgba(184,101,46,0.15);
 }
 
@@ -189,7 +189,7 @@ select:focus,textarea:focus,input[type="text"]:focus{
   border-radius:20px; border:1px solid var(--border2);
   background:var(--parchment2); color:var(--ink2); cursor:pointer; transition:all .15s;
 }
-.src-btn.active{background:var(--terra); color:var(--terra-pale); border-color:var(--terra);}
+.src-btn.active{background:var(--sage); color:var(--sage-pale); border-color:var(--sage);}
 .src-panel{display:none;}
 .src-panel.active{display:block;}
 
@@ -201,7 +201,7 @@ select:focus,textarea:focus,input[type="text"]:focus{
   border:1px dashed var(--border2); background:var(--parchment2);
   color:var(--ink2); font-size:13px; font-weight:500; cursor:pointer; transition:all .15s;
 }
-.upload-btn:hover{border-color:var(--terra3); background:var(--terra-mist); color:var(--terra);}
+.upload-btn:hover{border-color:var(--sage3); background:var(--sage-mist); color:var(--sage);}
 .upload-btn.has-file{border-style:solid; border-color:var(--teal2); background:var(--teal-pale); color:var(--teal);}
 .upload-hint{font-size:11px; color:var(--ink3); font-weight:400;}
 .divider-or{display:flex; align-items:center; gap:.75rem; margin:.75rem 0;}
@@ -210,9 +210,9 @@ select:focus,textarea:focus,input[type="text"]:focus{
 
 /* ── Tips ── */
 .tip-box{
-  border-left:3px solid var(--terra-light); background:var(--terra-mist);
+  border-left:3px solid var(--sage-light); background:var(--sage-mist);
   border-radius:0 var(--r) var(--r) 0;
-  padding:.75rem 1rem; font-size:13px; color:var(--terra); line-height:1.65; margin-top:.7rem;
+  padding:.75rem 1rem; font-size:13px; color:var(--sage); line-height:1.65; margin-top:.7rem;
 }
 .tip-box.teal{border-color:var(--teal2); background:var(--teal-pale); color:var(--teal);}
 .tip-box.amber{border-color:var(--cream3); background:var(--cream); color:var(--cream-dark);}
@@ -220,12 +220,12 @@ select:focus,textarea:focus,input[type="text"]:focus{
 
 /* ── Knowledge Box ── */
 .knowledge-box{
-  border:1px solid var(--terra-pale); background:var(--terra-mist);
+  border:1px solid var(--sage-pale); background:var(--sage-mist);
   border-radius:var(--rl); padding:1rem 1.25rem; margin-top:1rem;
 }
 .kb-label{
   font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
-  color:var(--terra); margin-bottom:.5rem;
+  color:var(--sage); margin-bottom:.5rem;
 }
 .knowledge-box p{font-size:13px; color:var(--ink2); line-height:1.7;}
 .knowledge-box p+p{margin-top:.5rem;}
@@ -234,12 +234,12 @@ select:focus,textarea:focus,input[type="text"]:focus{
 /* ── Buttons ── */
 .btn-primary{
   display:inline-flex; align-items:center; gap:8px;
-  background:var(--terra); color:var(--terra-pale);
+  background:var(--sage); color:var(--sage-pale);
   border:none; border-radius:var(--r); padding:11px 22px;
   font-family:inherit; font-size:14px; font-weight:600;
   cursor:pointer; transition:background .15s,transform .1s;
 }
-.btn-primary:hover{background:var(--terra2);}
+.btn-primary:hover{background:var(--sage2);}
 .btn-primary:active{transform:scale(.98);}
 .btn-secondary{
   display:inline-flex; align-items:center; gap:7px;
@@ -267,7 +267,7 @@ select:focus,textarea:focus,input[type="text"]:focus{
   border:1px solid rgba(255,255,255,0.05);
 }
 .prompt-box::-webkit-scrollbar{width:5px;}
-.prompt-box::-webkit-scrollbar-thumb{background:var(--terra2); border-radius:3px;}
+.prompt-box::-webkit-scrollbar-thumb{background:var(--sage2); border-radius:3px;}
 
 /* ── Grid ── */
 .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
@@ -297,7 +297,7 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
   border-radius:var(--r); border:1px solid transparent;
   background:transparent; color:var(--ink2); cursor:pointer; transition:all .15s;
 }
-.sub-tab-btn:hover{background:var(--terra-mist);}
+.sub-tab-btn:hover{background:var(--sage-mist);}
 .sub-tab-btn.active{background:#fff; border-color:var(--border2); color:var(--ink); box-shadow:var(--shadow);}
 .sub-panel{display:none;}
 .sub-panel.active{display:block;}
@@ -308,12 +308,12 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
   font-size:12px; color:var(--ink3);
   border-top:1px solid var(--parchment3);
 }
-.site-footer a{color:var(--terra3);}
+.site-footer a{color:var(--sage3);}
 
 /* ── 文體選單年段提示 ── */
 .genre-stage-note{
-  font-size:11px; color:var(--terra); background:var(--terra-mist);
-  border:1px solid var(--terra-pale); border-radius:var(--r);
+  font-size:11px; color:var(--sage); background:var(--sage-mist);
+  border:1px solid var(--sage-pale); border-radius:var(--r);
   padding:.4rem .75rem; margin-top:.35rem; display:none; line-height:1.5;
 }
 /* ── 貼入提醒 ── */
@@ -342,7 +342,7 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
     <h1>國小語文教師<span>寫作課程</span>AI備課指令系統</h1>
     <p class="hero-desc">依據108課綱國語文領域學習表現與學習內容設計，幫助教師在有限時數內進行專業且有系統的寫作課程教學設計。填寫基本資訊後，系統自動生成可直接貼入 ChatGPT、Claude、Gemini 等平台使用的完整AI指令。</p>
     <div class="hero-note">
-      <strong>📚 課綱文體分階登場：</strong>第一階段重句段・第二階段記敘應用說明・第三階段完整五大文體，選擇年級後自動對應
+      <strong>📚 課綱文體分階登場：</strong>第一階段重句段・第二階段記敘抒情應用說明・第三階段完整五大文體，選擇年級後自動對應
     </div>
     <div class="flow-row">
       <div class="flow-step"><div class="flow-step-num">A</div>學情診斷</div>
@@ -1002,7 +1002,7 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
 
 <footer class="site-footer">
   <p>國小寫作AI備課指令系統｜依據108課綱國語文領域學習表現與學習內容設計</p>
-  <p style="margin-top:.3rem">第一～三學習階段（1–6年級）國小版・國中版擴充中</p>
+  <p style="margin-top:.3rem">第一～三學習階段（1–6年級）國小版・與國中版共構完整 K–9 寫作教學系統</p>
 </footer>
 
 <script>
