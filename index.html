@@ -429,19 +429,20 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
               <span class="upload-hint">JPG / PNG</span>
             </label>
             <input type="file" id="a-img-upload" accept="image/*" style="display:none" onchange="handleImgUpload(event,'a-img-preview','a-img-note','a-img-label','a-img-el')">
-            <label class="upload-btn" id="a-file-label" for="a-file-upload">
-              <span>📄 上傳文字檔</span>
-              <span class="upload-hint">TXT</span>
+            <label class="upload-btn" id="a-pdf-label" for="a-pdf-upload">
+              <span>📑 上傳PDF</span>
+              <span class="upload-hint">PDF</span>
             </label>
-            <input type="file" id="a-file-upload" accept=".txt,text/plain" style="display:none" onchange="handleTxtUpload(event,'a-sample','a-file-label')">
+            <input type="file" id="a-pdf-upload" accept="application/pdf" style="display:none" onchange="handlePdfUpload(event,'a-sample','a-pdf-label','a-pdf-note')">
           </div>
+          <p id="a-pdf-note" style="font-size:12px;color:var(--ink3);margin-top:.3rem;display:none"></p>
           <div id="a-img-preview" style="display:none;margin:.6rem 0;">
             <img id="a-img-el" style="max-width:100%;max-height:220px;border-radius:var(--radius);border:1px solid var(--border);" alt="學生作品預覽">
-            <p id="a-img-note" style="font-size:12px;color:var(--text3);margin-top:.3rem"></p>
+            <p id="a-img-note" style="font-size:12px;color:var(--ink3);margin-top:.3rem"></p>
           </div>
           <div class="divider-or"><hr><span>或直接輸入文字</span><hr></div>
           <label class="field-label">貼入或描述學生寫作樣本<span class="req">*</span></label>
-          <textarea id="a-sample" rows="4" placeholder="可直接貼入學生文字，或描述樣本特徵。例如：學生寫了約80字描述去公園玩，全文一段，無標點，句子間用「然後」連接，缺乏具體描述。&#10;&#10;若已上傳圖片，可在此補充說明圖片中看不清楚的部分。"></textarea>
+          <textarea id="a-sample" rows="4" placeholder="可直接貼入學生文字，或描述樣本特徵。例如：學生寫了約80字描述去公園玩，全文一段，無標點，句子間用「然後」連接，缺乏具體描述。&#10;&#10;若已上傳圖片或PDF，可在此補充說明無法辨識的細節。"></textarea>
           <p class="field-hint">建議選取「中間程度」最具代表性的一份，不需完美樣本。</p>
         </div>
       </div>
@@ -903,18 +904,19 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
               <span class="upload-hint">JPG / PNG</span>
             </label>
             <input type="file" id="d2-img-upload" accept="image/*" style="display:none" onchange="handleImgUpload(event,'d2-img-preview','d2-img-note','d2-img-label','d2-img-el')">
-            <label class="upload-btn" id="d2-file-label" for="d2-file-upload">
-              <span>📄 上傳文字檔</span>
-              <span class="upload-hint">TXT</span>
+            <label class="upload-btn" id="d2-pdf-label" for="d2-pdf-upload">
+              <span>📑 上傳PDF</span>
+              <span class="upload-hint">PDF</span>
             </label>
-            <input type="file" id="d2-file-upload" accept=".txt,text/plain" style="display:none" onchange="handleTxtUpload(event,'d2-work','d2-file-label')">
+            <input type="file" id="d2-pdf-upload" accept="application/pdf" style="display:none" onchange="handlePdfUpload(event,'d2-work','d2-pdf-label','d2-pdf-note')">
           </div>
+          <p id="d2-pdf-note" style="font-size:12px;color:var(--ink3);margin-top:.3rem;display:none"></p>
           <div id="d2-img-preview" style="display:none;margin:.6rem 0;">
             <img id="d2-img-el" style="max-width:100%;max-height:220px;border-radius:var(--radius);border:1px solid var(--border);" alt="學生作品預覽">
-            <p id="d2-img-note" style="font-size:12px;color:var(--text3);margin-top:.3rem"></p>
+            <p id="d2-img-note" style="font-size:12px;color:var(--ink3);margin-top:.3rem"></p>
           </div>
           <div class="divider-or"><hr><span>或直接輸入文字</span><hr></div>
-          <textarea id="d2-work" rows="5" placeholder="將學生的寫作作品文字貼入此處……&#10;&#10;若已上傳圖片，可在此補充說明圖片中看不清楚的部分。"></textarea>
+          <textarea id="d2-work" rows="5" placeholder="將學生的寫作作品文字貼入此處……&#10;&#10;若已上傳圖片或PDF，可在此補充說明無法辨識的細節。"></textarea>
           <div class="genre-stage-note" id="d2-genre-note" style="display:none"></div>
         </div>
         <div class="field">
@@ -1149,49 +1151,60 @@ function handleImgUpload(event, previewContainerId, noteId, labelId, imgElId) {
   reader.readAsDataURL(file);
 }
 
-function handleTxtUpload(event, textareaId, labelId) {
+function handlePdfUpload(event, textareaId, labelId, noteId) {
   const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    document.getElementById(textareaId).value = e.target.result;
-    const label = document.getElementById(labelId);
-    label.classList.add('has-file');
-    label.querySelector('span').textContent = '✅ 檔案已載入';
-  };
-  reader.readAsText(file, 'UTF-8');
+  if (!file) return;
+  const label = document.getElementById(labelId);
+  const note = document.getElementById(noteId);
+  if (note) {
+    note.textContent = '已上傳：' + file.name + '（' + Math.round(file.size/1024) + ' KB）。請在下方文字框描述PDF的主要內容，或貼入關鍵段落，幫助AI準確診斷。';
+    note.style.display = 'block';
+  }
+  label.classList.add('has-file');
+  label.querySelector('span').textContent = '✅ PDF 已上傳';
+  const ta = document.getElementById(textareaId);
+  if (ta && !ta.value) {
+    ta.placeholder = '請在此描述PDF中的學生作品內容，或貼入關鍵段落文字，幫助AI進行準確診斷……';
+  }
 }
 
 function getImgNote(previewId) {
   const el = document.getElementById(previewId);
-  return (el && el.style.display !== 'none')
-    ? '\n\n【注意】教師已上傳學生手寫作品圖片。請依據教師在文字區域提供的描述進行診斷，並在報告中說明若能辨識手寫內容，哪些細節對診斷最具參考價值。'
-    : '';
+  const imgUploaded = (el && el.style.display !== 'none');
+  const prefix = previewId.split('-img-')[0];
+  const pdfLabel = document.getElementById(prefix + '-pdf-label');
+  const pdfUploaded = pdfLabel && pdfLabel.classList.contains('has-file');
+  if (imgUploaded) return '\n\n【注意】教師已上傳學生手寫作品圖片。請依據教師在文字區域提供的描述進行診斷，並在報告中說明若能辨識手寫內容，哪些細節對診斷最具參考價值。';
+  if (pdfUploaded) return '\n\n【注意】教師已上傳PDF檔案作為輔助素材。由於PDF內容無法在瀏覽器中直接讀取，請依據教師在文字區域提供的描述進行診斷。';
+  return '';
 }
 
-/* ══ 清除（修正：完整重置上傳狀態與所有子輸出）══ */
+/* ══ 清除（完整重置上傳狀態與所有子輸出）══ */
 function clearModule(m) {
   document.querySelectorAll('#panel-'+m+' select, #panel-'+m+' textarea, #panel-'+m+' input[type=text]')
     .forEach(el => el.value='');
   document.querySelectorAll('#panel-'+m+' .prompt-output').forEach(el => el.classList.remove('show'));
   if(m==='A'){
     document.getElementById('a-stage-hint').innerHTML='';
-    ['a-img-preview','d2-img-preview'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.style.display='none';
+    // 重置圖片預覽
+    ['a-img-preview'].forEach(id => {
+      const el = document.getElementById(id); if(el) el.style.display='none';
     });
-    ['a-img-label','a-file-label'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el){
-        el.classList.remove('has-file');
-        if(id==='a-img-label') el.querySelector('span').textContent='📷 上傳作品圖片';
-        else el.querySelector('span').textContent='📄 上傳文字檔';
-      }
+    // 重置PDF提示
+    ['a-pdf-note'].forEach(id => {
+      const el = document.getElementById(id); if(el){ el.textContent=''; el.style.display='none'; }
     });
-    const f1 = document.getElementById('a-img-upload');
-    const f2 = document.getElementById('a-file-upload');
-    if(f1) f1.value='';
-    if(f2) f2.value='';
+    // 重置上傳按鈕
+    const imgLabel = document.getElementById('a-img-label');
+    if(imgLabel){ imgLabel.classList.remove('has-file'); imgLabel.querySelector('span').textContent='📷 上傳作品圖片'; }
+    const pdfLabel = document.getElementById('a-pdf-label');
+    if(pdfLabel){ pdfLabel.classList.remove('has-file'); pdfLabel.querySelector('span').textContent='📑 上傳PDF'; }
+    // 重置file input
+    const f1 = document.getElementById('a-img-upload'); if(f1) f1.value='';
+    const f2 = document.getElementById('a-pdf-upload'); if(f2) f2.value='';
+    // 隱藏貼入提醒
+    const reminder = document.getElementById('A-paste-reminder');
+    if(reminder) reminder.style.display='none';
   }
 }
 
