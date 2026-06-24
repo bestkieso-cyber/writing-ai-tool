@@ -1301,7 +1301,11 @@ function generateB() {
   const grade = document.getElementById('b-grade').value;
   const hours = document.getElementById('b-hours').value;
   const genre = document.getElementById('b-genre').value;
-  if(!grade||!hours||!genre){ alert('請填寫：年級、授課節數、文體（必填欄位）。'); return; }
+  const genreRequired = !(grade === '1' || grade === '2');
+  if(!grade || !hours || (genreRequired && !genre)){
+    alert('請填寫：年級、授課節數' + (genreRequired ? '、文體' : '') + '（必填欄位）。');
+    return;
+  }
   const topic   = document.getElementById('b-topic').value.trim();
   const text    = document.getElementById('b-text').value.trim();
   const base    = document.getElementById('b-base').value.trim();
@@ -1309,13 +1313,16 @@ function generateB() {
   const skill   = document.getElementById('b-skill').value;
   const revise  = document.getElementById('b-revise').value;
   const d = STAGE_DATA[grade];
+  const genreLine = genreRequired
+    ? `寫作文體：${genre}`
+    : `寫作任務：本階段無文體區分，重點為句子完整性、標點符號運用與仿寫接寫技巧${topic ? '（教師指定主題：' + topic + '）' : ''}`;
   const prompt =
 `你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請根據以下資訊，設計一份完整的單元寫作教學計畫。
 
 【基本設定】
 任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
 預計授課節數：${hours}節課
-寫作文體：${genre}${topic?'\n寫作題目或主題：'+topic:''}${text?'\n對應課文或文本：'+text:''}${base?'\n學生已具備的基礎：'+base:''}${special?'\n特殊需求或限制：'+special:''}
+${genreLine}${(genreRequired&&topic)?'\n寫作題目或主題：'+topic:''}${text?'\n對應課文或文本：'+text:''}${base?'\n學生已具備的基礎：'+base:''}${special?'\n特殊需求或限制：'+special:''}
 寫作技巧教學重點：${skill||'請依年段建議最適切的技巧'}
 是否納入修改潤飾：${revise}
 
@@ -1357,7 +1364,12 @@ function generateC(type) {
   const num = {form:'1',content:'2',diff:'3'}[type];
   const grade = document.getElementById('c'+num+'-grade').value;
   const genre = document.getElementById('c'+num+'-genre').value;
-  if(!grade||!genre){ alert('請選擇年級與文體。'); return; }
+  if(!grade){ alert('請選擇年級。'); return; }
+  if(grade === '1' || grade === '2'){
+    alert('一、二年級（第一學習階段）尚無文體區分，本模組的形式鷹架／內容鷹架／分層任務皆以文體為設計基礎，暫不適用。建議改用「模組A學情診斷」或「模組B單元設計」，以句段練習為核心進行教學設計。');
+    return;
+  }
+  if(!genre){ alert('請選擇文體。'); return; }
   const d = STAGE_DATA[grade];
   let prompt = '';
 
@@ -1470,7 +1482,12 @@ function generateD(type) {
   const num = {rubric:'1',feedback:'2',peer:'3'}[type];
   const grade = document.getElementById('d'+num+'-grade').value;
   const genre = document.getElementById('d'+num+'-genre').value;
-  if(!grade||!genre){ alert('請選擇年級與文體。'); return; }
+  if(!grade){ alert('請選擇年級。'); return; }
+  if(grade === '1' || grade === '2'){
+    alert('一、二年級（第一學習階段）尚無文體區分，本模組的評量規準／AI批閱／自評互評皆以文體為設計基礎，暫不適用。建議改用「模組A學情診斷」，以句子完整性、標點符號與仿寫接寫為核心進行評估。');
+    return;
+  }
+  if(!genre){ alert('請選擇文體。'); return; }
   const d = STAGE_DATA[grade];
   let prompt = '';
 
