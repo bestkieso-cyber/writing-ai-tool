@@ -657,8 +657,9 @@ hr.div{border:none; border-top:1px solid var(--parchment3); margin:1.5rem 0;}
           </div>
         </div>
         <div class="field">
-          <label class="field-label">核心寫作技巧或結構重點<span class="req">*</span></label>
+          <label class="field-label" id="c1-focus-label">核心寫作技巧或結構重點<span class="req">*</span></label>
           <input type="text" id="c1-focus" placeholder="例如：順敘法、直接抒情、說明文結構、開頭技巧……">
+          <p class="field-hint">若選擇一、二年級的句段任務類型，此欄位為選填。</p>
         </div>
         <div class="field">
           <label class="field-label">其他需求</label>
@@ -1042,58 +1043,74 @@ const STAGE_DATA = {
     connect:'【銜接國中】學生進入七年級後，寫作要求將大幅提升至五大文體全面展開。六年級教師是學生最後一道「能力補網」的機會，請善用本系統進行學情診斷。' }
 };
 
-/* ══ 各學習階段適用文體 ══ */
+/* ══ 各學習階段適用文體／任務類型 ══ */
 const STAGE_GENRES = {
   '1': {
-    genres: [],
-    note: '📌 一年級（第一學習階段）：本階段尚無文體概念。課綱重點為——句子完整性、常用標點符號（Ac-I-1）、仿寫接寫技巧（6-I-4）、積累寫作材料（6-I-2）。生成的指令將以「句段基礎建立」為核心，請在下方說明具體的寫作任務內容。'
+    genres: ['仿寫句子','接寫句子／故事','句子擴展','看圖寫話','簡單日記（自我介紹格式）'],
+    isLowGrade: true,
+    note: '📌 一年級（第一學習階段）：本階段尚無文體概念，下方選單改為「句段寫作任務類型」。課綱重點為——句子完整性、常用標點符號（Ac-I-1）、仿寫接寫技巧（6-I-4）、積累寫作材料（6-I-2）。'
   },
   '2': {
-    genres: [],
-    note: '📌 二年級（第一學習階段）：本階段尚無文體概念。課綱重點為——語意完整的句子與主題明確的段落（6-I-3）、仿寫接寫（6-I-4）、修改文句錯誤（6-I-5）、培養寫作興趣（6-I-6）。生成的指令將以「句段基礎建立」為核心，請在下方說明具體的寫作任務內容。'
+    genres: ['仿寫句子','接寫句子／故事','句子擴展','看圖寫話','簡單日記（自我介紹格式）','找出並修改錯誤句子'],
+    isLowGrade: true,
+    note: '📌 二年級（第一學習階段）：本階段尚無文體概念，下方選單改為「句段寫作任務類型」。課綱重點為——語意完整的句子與主題明確的段落（6-I-3）、仿寫接寫（6-I-4）、修改文句錯誤（6-I-5）、培養寫作興趣（6-I-6）。'
   },
   '3': {
     genres: ['記敘文本','抒情文本','說明文本（初步）','應用文本','童詩／新詩（仿寫）','故事'],
+    isLowGrade: false,
     note: '📌 三年級（第二學習階段）：適用文體——記敘（Ba-Ⅱ）、抒情（Bb-Ⅱ，含直接抒情與間接抒情）、說明（Bc-Ⅱ，初步，尚無結構要求）、應用文（Be-Ⅱ）、童詩仿寫（6-Ⅱ-5）、故事（Ad-Ⅱ-3）。⚠️ 議論文本在本階段完全不應出現。'
   },
   '4': {
     genres: ['記敘文本','抒情文本','說明文本（初步）','應用文本','童詩／新詩（仿寫）','故事'],
+    isLowGrade: false,
     note: '📌 四年級（第二學習階段）：適用文體同三年級。說明文尚無結構要求，重在邏輯客觀的說明態度；抒情文本含直接抒情（Bb-Ⅱ-4）與藉敘事景物間接抒情（Bb-Ⅱ-5）。⚠️ 議論文本在本階段完全不應出現。'
   },
   '5': {
     genres: ['記敘文本','抒情文本','說明文本','議論文本（初步）','應用文本','童詩／新詩','故事創作'],
+    isLowGrade: false,
     note: '⭐ 五年級（第三學習階段）關鍵節點：說明文本結構首次正式登場（Bc-Ⅲ-4）；議論文本開始萌芽（Bd-Ⅲ）；抒情文本加入對自然與生命的感悟（Bb-Ⅲ-3）；故事創作與童詩創作正式列入（6-Ⅲ-4）。七種文體完整適用。'
   },
   '6': {
     genres: ['記敘文本','抒情文本','說明文本','議論文本（初步）','應用文本','童詩／新詩','故事創作'],
+    isLowGrade: false,
     note: '⭐ 六年級（第三學習階段）：七種文體完整適用。本年段是國小寫作能力總結，也是國中銜接的準備期。議論文本仍為初步萌芽（舉例、正反論證），尚未要求完整論點論據論證架構。'
   }
 };
 
-/* 根據年級動態更新文體選單 */
+/* 根據年級動態更新文體／任務類型選單 */
 function updateGenreByGrade(gradeSelectId, genreSelectId, noteId) {
   const grade = document.getElementById(gradeSelectId).value;
   const genreSelect = document.getElementById(genreSelectId);
   const noteEl = noteId ? document.getElementById(noteId) : null;
+  const labelEl = genreSelect.closest('.field') ? genreSelect.closest('.field').querySelector('.field-label') : null;
   if (!grade) {
+    genreSelect.disabled = false;
     genreSelect.innerHTML = '<option value="">請選擇文體</option><option value="記敘文本">記敘文本</option><option value="抒情文本">抒情文本</option><option value="說明文本">說明文本</option><option value="議論文本">議論文本</option><option value="應用文本">應用文本</option><option value="童詩／新詩">童詩／新詩</option><option value="故事創作">故事創作</option>';
     if (noteEl) noteEl.style.display = 'none';
+    if (labelEl) labelEl.innerHTML = '文體<span class="req">*</span>';
     return;
   }
   const data = STAGE_GENRES[grade];
-  if (data.genres.length === 0) {
-    genreSelect.innerHTML = '<option value="">本階段無文體區分，請說明寫作任務</option>';
-    genreSelect.disabled = true;
+  genreSelect.disabled = false;
+  if (data.isLowGrade) {
+    genreSelect.innerHTML = '<option value="">請選擇寫作任務類型</option>' +
+      data.genres.map(g => `<option value="${g}">${g}</option>`).join('');
+    if (labelEl) labelEl.innerHTML = '寫作任務類型<span class="req">*</span>';
   } else {
-    genreSelect.disabled = false;
     genreSelect.innerHTML = '<option value="">請選擇文體</option>' +
       data.genres.map(g => `<option value="${g}">${g}</option>`).join('');
+    if (labelEl) labelEl.innerHTML = '文體<span class="req">*</span>';
   }
   if (noteEl) {
     noteEl.textContent = data.note;
     noteEl.style.display = 'block';
   }
 }
+/* 判斷是否為低年段（一、二年級） */
+function isLowGradeCheck(grade) {
+  return STAGE_GENRES[grade] ? STAGE_GENRES[grade].isLowGrade : false;
+}
+
 function switchMain(btn, id) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
@@ -1301,11 +1318,7 @@ function generateB() {
   const grade = document.getElementById('b-grade').value;
   const hours = document.getElementById('b-hours').value;
   const genre = document.getElementById('b-genre').value;
-  const genreRequired = !(grade === '1' || grade === '2');
-  if(!grade || !hours || (genreRequired && !genre)){
-    alert('請填寫：年級、授課節數' + (genreRequired ? '、文體' : '') + '（必填欄位）。');
-    return;
-  }
+  if(!grade||!hours||!genre){ alert('請填寫：年級、授課節數、' + (isLowGradeCheck(grade) ? '寫作任務類型' : '文體') + '（必填欄位）。'); return; }
   const topic   = document.getElementById('b-topic').value.trim();
   const text    = document.getElementById('b-text').value.trim();
   const base    = document.getElementById('b-base').value.trim();
@@ -1313,16 +1326,52 @@ function generateB() {
   const skill   = document.getElementById('b-skill').value;
   const revise  = document.getElementById('b-revise').value;
   const d = STAGE_DATA[grade];
-  const genreLine = genreRequired
-    ? `寫作文體：${genre}`
-    : `寫作任務：本階段無文體區分，重點為句子完整性、標點符號運用與仿寫接寫技巧${topic ? '（教師指定主題：' + topic + '）' : ''}`;
-  const prompt =
+  const isLow = isLowGradeCheck(grade);
+
+  let prompt;
+  if (isLow) {
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時擅長低年段（一、二年級）的句段寫作教學設計。請根據以下資訊，設計一份完整的單元寫作教學計畫。
+
+【基本設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+預計授課節數：${hours}節課
+寫作任務類型：${genre}${topic?'\n寫作主題（選填）：'+topic:''}${text?'\n對應課文或文本：'+text:''}${base?'\n學生已具備的基礎：'+base:''}${special?'\n特殊需求或限制：'+special:''}
+寫作技巧教學重點：${skill||'請依年段建議最適切的技巧（如仿寫、接寫）'}
+是否納入修改潤飾：${revise}
+
+【課綱對應提示】
+${d.core}
+
+【重要說明】本階段（第一學習階段）尚無文體概念，教學設計核心應圍繞：句子完整性、常用標點符號運用、仿寫接寫技巧、積累寫作材料、培養寫作興趣。請勿要求學生產出「一篇文章」，應以句子或簡短段落為產出單位。
+
+請依以下結構完成教學計畫：
+
+一、單元教學目標（3至4條，以學生為主語，對應108課綱學習表現指標6-I，請標示指標代碼）
+
+二、教學流程架構（依節數分配，每節說明：時間分配、教師教學活動、學生學習活動、核心任務）
+請特別說明如何透過「${genre}」這個任務類型，循序建立學生的句子能力。
+
+三、「寫前—寫中—寫後」教學要點
+- 寫前激發（如何用圖片、實物、生活經驗引發表達動機）
+- 寫中支持（教師如何示範句型、提供口頭提示、給予句子鷹架）
+- 寫後回饋（如何用最簡單的方式肯定學生、指出一個可改進的地方）
+
+四、任務設計建議
+針對「${genre}」，提供2至3個具體的任務範例（例如仿寫的原句、接寫的開頭句、看圖寫話的圖片主題），並說明各範例的難度差異。
+
+五、本年段關鍵提醒
+說明本次教學在整個國小寫作課程地圖中的位置，以及如何為第二學習階段（三年級開始的文體寫作）打好基礎。
+
+請使用繁體中文，語言專業但貼近現場，特別注意低年段學生的認知特點，避免使用過於抽象的教學語言。`;
+  } else {
+    prompt =
 `你是一位熟悉台灣108課綱國語文領域的寫作課程專家。請根據以下資訊，設計一份完整的單元寫作教學計畫。
 
 【基本設定】
 任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
 預計授課節數：${hours}節課
-${genreLine}${(genreRequired&&topic)?'\n寫作題目或主題：'+topic:''}${text?'\n對應課文或文本：'+text:''}${base?'\n學生已具備的基礎：'+base:''}${special?'\n特殊需求或限制：'+special:''}
+寫作文體：${genre}${topic?'\n寫作題目或主題：'+topic:''}${text?'\n對應課文或文本：'+text:''}${base?'\n學生已具備的基礎：'+base:''}${special?'\n特殊需求或限制：'+special:''}
 寫作技巧教學重點：${skill||'請依年段建議最適切的技巧'}
 是否納入修改潤飾：${revise}
 
@@ -1348,6 +1397,7 @@ ${d.genre_note}
 說明本次教學在整個國小寫作課程地圖中的位置，以及與上下學習階段的銜接關係。
 
 請使用繁體中文，語言專業但貼近現場，避免純學術論述。`;
+  }
 
   document.getElementById('B-prompt-text').textContent = prompt;
   document.getElementById('B-output').classList.add('show');
@@ -1364,16 +1414,40 @@ function generateC(type) {
   const num = {form:'1',content:'2',diff:'3'}[type];
   const grade = document.getElementById('c'+num+'-grade').value;
   const genre = document.getElementById('c'+num+'-genre').value;
-  if(!grade){ alert('請選擇年級。'); return; }
-  if(grade === '1' || grade === '2'){
-    alert('一、二年級（第一學習階段）尚無文體區分，本模組的形式鷹架／內容鷹架／分層任務皆以文體為設計基礎，暫不適用。建議改用「模組A學情診斷」或「模組B單元設計」，以句段練習為核心進行教學設計。');
-    return;
-  }
-  if(!genre){ alert('請選擇文體。'); return; }
+  const isLow = isLowGradeCheck(grade);
+  if(!grade||!genre){ alert('請選擇年級與' + (isLow ? '寫作任務類型' : '文體') + '。'); return; }
   const d = STAGE_DATA[grade];
   let prompt = '';
 
-  if(type==='form'){
+  if(type==='form' && isLow){
+    const focus = document.getElementById('c1-focus').value.trim();
+    const extra = document.getElementById('c1-extra').value.trim();
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時擅長低年段（一、二年級）的句段寫作教學設計。請為以下教學情境設計形式鷹架教材。
+
+【教學設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+寫作任務類型：${genre}${focus?'\n教師指定的句型或重點（選填）：'+focus:''}${extra?'\n其他需求：'+extra:''}
+
+【重要說明】本階段尚無文體概念，鷹架設計應以「句子」為最小單位，圍繞常用標點符號（Ac-I-1）、仿寫接寫技巧（6-I-4）、語意完整的句子（6-I-3）設計。
+
+【形式鷹架設計要求】
+
+一、句型示範卡
+針對「${genre}」這個任務類型，設計3組由淺入深的示範句型，每組包含：句型公式（用＿＿標示可替換部分）、範例句2句、口語化說明（這個句型可以用在什麼時候）。
+
+二、視覺化鷹架設計
+設計一份學生可直接操作的視覺化輔助工具（如：句子接龍卡、看圖提示卡、詞語選擇卡），用文字描述其版面與操作方式，教師可依此製作學習單。
+
+三、引導提問（5題）
+設計5個引導學生完成「${genre}」的課堂提問，由淺入深排列（例如：先問「你看到什麼」，再問「他在做什麼」，最後問「為什麼」），並標示每題的教學目的。
+
+四、教師使用說明
+說明這套鷹架的使用時機、操作步驟，以及面對不同程度學生時的調整方式（例如完全不會寫的學生可以先口頭表達再寫）。
+
+請使用繁體中文，語言貼近國小低年段現場，避免使用抽象的教學術語。`;
+
+  } else if(type==='form'){
     const focus = document.getElementById('c1-focus').value.trim();
     const extra = document.getElementById('c1-extra').value.trim();
     if(!focus){ alert('請填寫核心寫作技巧或結構重點。'); return; }
@@ -1400,6 +1474,35 @@ function generateC(type) {
 說明這套形式鷹架的使用時機（寫前/寫中/寫後）、使用順序，以及常見操作錯誤。
 
 請使用繁體中文，語言貼近國小現場。`;
+
+  } else if(type==='content' && isLow){
+    const topic  = document.getElementById('c2-topic').value.trim();
+    const script = document.getElementById('c2-script').value;
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時擅長低年段（一、二年級）的句段寫作教學設計。請為以下教學情境設計內容鷹架教材。
+
+【教學設定】
+任教年級：${grade}年級（${d.stage}）
+寫作任務類型：${genre}${topic?'\n寫作主題（選填）：'+topic:''}
+課堂引導腳本：${script}
+
+【重要說明】本階段學生的「內容」來源主要是生活經驗與感官觀察，鷹架設計應幫助學生「想得起來、說得出來」，而非要求深刻的情感或思想表達。
+
+【內容鷹架設計要求】
+
+一、感官觀察提問（5至7題）
+用最具體、最貼近生活的問題，幫助學生回想或觀察可以寫的內容（例如：「你看到的是什麼顏色？」「他在笑還是在哭？」）。問題需符合${grade}年級學生的理解程度。
+
+二、口說先行引導
+說明如何讓學生「先說再寫」——設計一個簡單的口頭練習活動，幫助學生在動筆前先把句子說順。
+
+三、詞語與句型提示庫
+提供一份「好用詞語小卡」的設計方案（用文字描述），列出5至8個該主題可能用到的詞語或簡單句型，幫助學生在寫的時候有材料可用。
+${script==='是，請提供師生對話腳本'?`
+四、師生課堂對話引導腳本
+設計一段完整的師生對話腳本（約6至10個來回），示範教師如何用口語化的提問引導學生想出內容並組織成句子。`:''}
+
+請使用繁體中文，語言親切自然，符合低年段教學現場的真實對話方式。`;
 
   } else if(type==='content'){
     const topic  = document.getElementById('c2-topic').value.trim();
@@ -1432,7 +1535,45 @@ ${script==='是，請提供師生對話腳本'?`
 
 請使用繁體中文，語言親切自然，如同老師真實的課堂對話。`;
 
-  } else {
+  } else if(type==='diff' && isLow){
+    const topic = document.getElementById('c3-topic').value.trim();
+    const dist  = document.getElementById('c3-dist').value.trim();
+    if(!topic){ alert('請填寫共同寫作任務或主題。'); return; }
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時擅長低年段（一、二年級）的句段寫作教學設計。請為以下教學情境設計分層差異化寫作任務。
+
+【教學設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+寫作任務類型：${genre}
+共同寫作任務或主題：${topic}${dist?'\n班級學生能力分布：'+dist:''}
+
+【重要說明】本階段以句子為產出單位，分層不應以「文體深度」區分，而應以「句子的完整度與獨立程度」區分。
+
+針對同一任務，設計三個能力層次的版本。
+
+【基礎層】（仍需大量協助才能完成句子的學生）
+- 任務說明：（例如：看圖選詞填空、口說由教師代寫）
+- 提供的鷹架支持：（具體說明）
+- 對應課綱指標：（標示代碼）
+- 評量重點：（這個層次最重要看什麼）
+
+【發展層】（能在提示下獨立寫出句子的學生）
+- 任務說明
+- 提供的鷹架支持
+- 對應課綱指標
+- 評量重點
+
+【深化層】（能獨立寫出完整句子甚至簡短段落的學生）
+- 任務說明
+- 提供的鷹架支持（此層次可加入仿寫接寫的挑戰）
+- 對應課綱指標
+- 評量重點
+
+最後請說明：教師如何在課堂中管理三個層次（操作建議），以及如何讓不同層次的學生都有成就感。
+
+請使用繁體中文，語言貼近國小低年段現場。`;
+
+  } else if(type==='diff'){
     const topic = document.getElementById('c3-topic').value.trim();
     const dist  = document.getElementById('c3-dist').value.trim();
     if(!topic){ alert('請填寫共同寫作題目或主題。'); return; }
@@ -1482,16 +1623,41 @@ function generateD(type) {
   const num = {rubric:'1',feedback:'2',peer:'3'}[type];
   const grade = document.getElementById('d'+num+'-grade').value;
   const genre = document.getElementById('d'+num+'-genre').value;
-  if(!grade){ alert('請選擇年級。'); return; }
-  if(grade === '1' || grade === '2'){
-    alert('一、二年級（第一學習階段）尚無文體區分，本模組的評量規準／AI批閱／自評互評皆以文體為設計基礎，暫不適用。建議改用「模組A學情診斷」，以句子完整性、標點符號與仿寫接寫為核心進行評估。');
-    return;
-  }
-  if(!genre){ alert('請選擇文體。'); return; }
+  const isLow = isLowGradeCheck(grade);
+  if(!grade||!genre){ alert('請選擇年級與' + (isLow ? '寫作任務類型' : '文體') + '。'); return; }
   const d = STAGE_DATA[grade];
   let prompt = '';
 
-  if(type==='rubric'){
+  if(type==='rubric' && isLow){
+    const goal  = document.getElementById('d1-goal').value.trim();
+    const level = document.getElementById('d1-level').value;
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時擅長低年段（一、二年級）的句段寫作評量設計。請設計一份完整的寫作評量規準（Rubric）。
+
+【評量設定】
+任教年級：${grade}年級（${d.stage}，學習表現代碼：6-${d.code}）
+寫作任務類型：${genre}${goal?'\n本次核心教學目標：'+goal:''}
+評量層級：${level}
+
+【重要說明】本階段尚無文體概念，評量向度應圍繞：句子完整性（6-I-3）、常用標點符號運用（Ac-I-1）、仿寫接寫的完成度（6-I-4）、寫作態度與興趣（6-I-6）。
+
+【評量規準設計要求】
+
+一、評量向度設定（3至4個向度）
+根據108課綱第一學習階段的學習表現，設定最適切的評量向度（例如：句子完整度、標點符號使用、仿寫吻合度），並說明各向度的觀察重點。
+
+二、各向度評量規準表
+以表格形式呈現（文字描述），每個層級需有具體可觀察的行為描述（例如：「能寫出主語＋動詞的完整句子」優於「句子寫得不錯」）。
+
+三、教師觀察重點提示
+說明評閱時應特別注意什麼、低年段常見的書寫困難（如：缺乏主語、標點亂用、字數過少）、如何快速判斷學生程度。
+
+四、學生版對照說明
+將評量重點轉化為${grade}年級學生能理解的語言（建議用圖示或簡單口語，而非文字規準），讓學生知道「怎樣算寫得好」。
+
+請使用繁體中文，實用為先，特別注意低年段的認知特點。`;
+
+  } else if(type==='rubric'){
     const goal  = document.getElementById('d1-goal').value.trim();
     const level = document.getElementById('d1-level').value;
     prompt =
@@ -1517,6 +1683,42 @@ function generateD(type) {
 將評量重點轉化為學生可理解的語言（適合${grade}年級），讓學生在寫作前就清楚知道「什麼樣的作品算好」。
 
 請使用繁體中文，實用為先。`;
+
+  } else if(type==='feedback' && isLow){
+    const topic = document.getElementById('d2-topic').value.trim();
+    const work  = document.getElementById('d2-work').value.trim();
+    const focus = document.getElementById('d2-focus').value;
+    const imgNote = getImgNote('d2-img-preview');
+    if(!topic||(!work&&!imgNote)){ alert('請填寫寫作任務與學生作品（文字或圖片）。'); return; }
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時善於以鼓勵、簡單的語言與低年段學生溝通。
+
+【批閱設定】
+學生年級：${grade}年級（${d.stage}）
+寫作任務類型：${genre}
+寫作任務：${topic}
+回饋風格：${focus}
+
+【學生作品】
+${work||'（請參考已上傳的圖片作品）'}${imgNote}
+
+【重要說明】本階段評量重點為句子完整性、標點符號、仿寫接寫的完成度，不涉及文體或深刻內容的要求。
+
+請依以下結構提供個別化回饋：
+
+一、兩項具體優點
+指出作品中真實的亮點（例如：「這句話有主語有動作，寫得很完整」），語言需符合${grade}年級學生可理解的程度，用詞越簡單越好。
+
+二、一個最需優先改善的地方
+說明問題在哪裡（例如：缺少標點、句子不完整）、具體的改善方向，並提供一個可以直接套用的示範句。
+
+三、一個簡單的鼓勵式提問
+設計一個非常具體、學生容易回答的問題，引導學生想想可以怎麼把句子寫得更完整。
+
+四、教師使用提示
+說明這份回饋的使用建議（建議以口頭回饋為主，書面回饋盡量簡短，並提供可以怎麼跟學生說的口語範例）。
+
+請使用繁體中文，語言簡單親切。`;
 
   } else if(type==='feedback'){
     const topic = document.getElementById('d2-topic').value.trim();
@@ -1551,6 +1753,38 @@ ${work||'（請參考已上傳的圖片作品）'}${imgNote}
 說明這份回饋的使用建議（例如：是否適合直接給學生、口頭還是書面回饋、後續追蹤建議）。
 
 請使用繁體中文。`;
+
+  } else if(type==='peer' && isLow){
+    const evalType = document.getElementById('d3-type').value;
+    const goal     = document.getElementById('d3-goal').value.trim();
+    prompt =
+`你是一位熟悉台灣108課綱國語文領域的寫作課程專家，同時擅長低年段（一、二年級）的教學工具設計。請設計一份學生${evalType}。
+
+【設計設定】
+年級：${grade}年級（${d.stage}）
+寫作任務類型：${genre}
+工具類型：${evalType}${goal?'\n本次核心學習目標：'+goal:''}
+
+【重要說明】本階段學生的識字與閱讀能力有限，工具設計應大量使用圖像、表情符號或簡單詞語，文字說明降到最低。
+
+【設計要求】
+
+一、工具設計原則說明
+說明針對${grade}年級學生設計此工具時的特殊考量（識字量有限、需要圖像輔助、專注時間短）。
+
+二、${evalType}表格
+設計可直接印製使用的表格（以文字描述版面配置），包含：
+- 2至3個觀察重點（建議用圖像化方式呈現，如笑臉／普通臉／哭臉）
+- 每個重點對應的具體例子（一句話即可）
+- 簡單的自我感受欄位（可用表情符號勾選）
+
+三、使用說明（教師版）
+說明如何在課堂中操作此工具（建議由教師帶讀、口頭引導完成）、需要多少時間。
+
+四、使用說明（學生版）
+以${grade}年級學生看得懂的語言（盡量口語化、避免生字），說明如何使用這份工具。
+
+請使用繁體中文，語言親切簡單，學生版說明需高度口語化。`;
 
   } else {
     const evalType = document.getElementById('d3-type').value;
